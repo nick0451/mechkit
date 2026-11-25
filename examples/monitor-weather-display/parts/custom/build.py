@@ -20,6 +20,10 @@ and is bolted on the left with a 4th insert + M3 x 10. The cap's top wall sits o
 pull when the cable is unplugged) with a slot for the USB socket. Clamp changed (clamp bolt moved to x -16, cap insert,
 new ledge, wall 25.4 tall); new part Board_Cap. Pod, Bezel, Cover, Shoe unchanged from v0.6.
 
+v0.9 cleanup (2026-11-25): text-to-cad's printing check found three slivers 0.01-0.05 mm thick in the Pod, where the
+flex-ribbon relief cut 0.01 mm into the front lip and stopped 0.04 mm short of the pin channel. The relief now starts at
+the lip and runs into the channel. Geometry moves by 0.04 mm at most; nothing a printer can make changes.
+
 v0.6 (2026-11-24, the v0.5 Pod "fits much better"): a separate decorative BEZEL in the style of an earlier build (locating pins on
 its back into blind holes in the pod face, a dab of glue) with a turbo-gauge look: deep chamfered bore and a tick scale.
 The Pod gained the 5 pin holes; nothing else changed. The pod still works without the bezel.
@@ -174,9 +178,13 @@ def pod(p):
     # relief for the flex ribbon: it folds over the screen's edge on the tab side, as thick as the screen itself
     top = extra + r_bl                                                               # pocket edge toward the tab
     v0, v1 = top - 4.0, top + TFT["fpc_past_screen"] + p["fpc_clear"]
-    ribbon = bd.Pos(0, (v0 + v1) / 2, (p["lip_front"] + z_pcb) / 2) * bd.Box(TFT["fpc_w"] + 2 * p["fpc_clear"], v1 - v0, z_pcb - p["lip_front"] + 0.02)
     # channel in front of the 7 solder pads, so wire ends and solder on the board's front face do not lift it off its seat
     pin_v = TFT["pcb_len"] - TFT["pcb_d"] / 2 - TFT["pin_row_from_tab_end"]
+    ch_v0 = pin_v - p["pin_channel_h"] / 2
+    if 0 < ch_v0 - v1 < 0.2:                         # v0.9 cleanup: run on into the channel instead of leaving a 0.04 mm wall
+        v1 = ch_v0
+    # the relief starts AT the lip, not 0.01 into it: that overcut left a 0.01 mm step and a wedge against the window
+    ribbon = bd.Pos(0, (v0 + v1) / 2, (p["lip_front"] + z_pcb + 0.01) / 2) * bd.Box(TFT["fpc_w"] + 2 * p["fpc_clear"], v1 - v0, z_pcb - p["lip_front"] + 0.01)
     ch_w = 6 * TFT["pin_pitch"] + 5.0                                              # the pad row + 2.5 mm each side
     ch_d = TFT["solder_leg_front"] + p["pin_channel_clear"]
     if z_pcb - ch_d < 0.8:
@@ -710,8 +718,9 @@ def main():
     out = PROJECT / "exports" / VERSION
     out.mkdir(parents=True, exist_ok=True)
     report = {"version": VERSION, "params": P, "parts": {}, "problems": problems, "notes": notes}
+    printed = {}
     for name in world:
-        s = print_oriented(name, world, local)
+        s = printed[name] = print_oriented(name, world, local)
         b3d.save_stl(s, out / ("%s.stl" % name))
         b3d.save_step(world[name], out / ("%s_as_assembled.step" % name))
         bb = s.bounding_box()
@@ -719,6 +728,20 @@ def main():
                                  "valid": bool(world[name].is_valid)}
         print("%-6s %7.0f mm3 (about %4.1f g solid)  prints %5.1f x %5.1f x %5.1f mm  valid=%s" % (
             name, world[name].volume, world[name].volume * 1.27e-3, bb.size.X, bb.size.Y, bb.size.Z, world[name].is_valid))
+    # manufacturability (text-to-cad's general FDM rules, Bambu A1: 0.4 mm nozzle, 256 mm bed) and geometry soundness
+    from mechkit import dfm
+    fab = {"printing": dfm.printing(printed, material="petg", technology="fdm", nozzle=0.4, build_volume=(256, 256, 256)),
+           "geometry": dfm.geometry(world)}
+    print("DFM (%s): %s" % (fab["printing"]["checker"], ", ".join("%s %s" % (n, e["status"]) for n, e in fab["printing"]["parts"].items())))
+    print("written:", dfm.write_report(out, fab))
+    problems += dfm.problems(fab)
+    from mechkit import drawing                     # one sheet per printed part, every number measured from the solid
+    try:
+        sheets = [drawing.part_sheet(printed[n], n.replace("_", " "), part_number="MWD-%s-%s" % (VERSION, n), material="PETG",
+                                     source="build.py %s, print orientation" % VERSION) for n in printed]
+        print("written:", drawing.write(sheets, out / "drawings.pdf"))
+    except Exception as e:
+        problems.append("drawings not written: %s: %s" % (type(e).__name__, e))
     (PROJECT / "logs").mkdir(exist_ok=True)
     (PROJECT / "logs" / ("build_%s.json" % VERSION)).write_text(json.dumps(report, indent=1), encoding="utf-8")
     from mechkit.present import manifest as M

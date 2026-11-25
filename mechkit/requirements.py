@@ -10,7 +10,7 @@
     python -m mechkit check <project folder> [--reports <folder with the report files>]
 
 Each check reads one report file (the newest export folder by default): stability.json, print_estimates.json,
-sim_report.json, mount_checks.json. A missing report gives "not evaluated", never a silent pass.
+sim_report.json, mount_checks.json, dfm_report.json. A missing report gives "not evaluated", never a silent pass.
 Statuses: pass | fail | not evaluated | manual (waiting for a person).
 `python -m mechkit check` exits 0 only when every requirement passes, 1 when any fails, 2 when none fails but some are
 not evaluated or still waiting for a person: an unchecked requirement is never reported as success.
@@ -132,6 +132,42 @@ def _mounts_pass(check, reports, project=None):
     return ("pass" if not bad else "fail"), "%d mount checks, %d failed" % (len(rows), len(bad))
 
 
+def _dfm_ok(check, reports, project=None):
+    """{"type": "dfm_ok", "process": "printing" | "sheet" | "laser", "max_warnings": N (optional)}: dfm_report.json."""
+    r = _load(reports, "dfm_report.json")
+    proc = check.get("process", "printing")
+    if r is None or not r.get(proc):
+        return "not evaluated", "no %s check in dfm_report.json" % proc
+    parts = r[proc]["parts"]
+    failed = [n for n, e in parts.items() if e["status"] == "fail"]
+    unchecked = [n for n, e in parts.items() if e["status"] != "pass" and e["status"] != "fail"]
+    warnings = sum(e.get("warnings", 0) for e in parts.values())
+    detail = "%d parts, %d failed, %d not evaluated, %d warnings (%s; %s)" % (len(parts), len(failed), len(unchecked), warnings,
+                                                                          r[proc].get("checker"), "general rules, not a shop's")
+    if failed:
+        return "fail", detail + ": " + ", ".join(failed)
+    if unchecked or not parts:
+        return "not evaluated", detail + (": " + ", ".join(unchecked) if unchecked else "")
+    if "max_warnings" in check and warnings > check["max_warnings"]:
+        return "fail", detail + " (limit %d warnings)" % check["max_warnings"]
+    return "pass", detail
+
+
+def _geometry_sound(check, reports, project=None):
+    """{"type": "geometry_sound"}: every solid in dfm_report.json's geometry section is valid, closed, not self-intersecting."""
+    r = _load(reports, "dfm_report.json")
+    g = (r or {}).get("geometry")
+    if not g:
+        return "not evaluated", "no geometry check in dfm_report.json"
+    bad = [n for n, v in g.items() if v["status"] == "fail"]
+    unchecked = [n for n, v in g.items() if v["status"] not in ("pass", "fail")]
+    if bad:
+        return "fail", "not sound: %s" % ", ".join(bad)
+    if unchecked:
+        return "not evaluated", "could not check: %s" % ", ".join(unchecked)
+    return "pass", "%d solids sound" % len(g)
+
+
 CHECKS = {
     "stability_min_ratio": _stability_min_ratio,
     "print_time_max_h": _print_time_max_h,
@@ -139,6 +175,8 @@ CHECKS = {
     "parts_fit_bed": _parts_fit_bed,
     "strength_min_safety_factor": _strength_min_safety_factor,
     "mounts_pass": _mounts_pass,
+    "dfm_ok": _dfm_ok,
+    "geometry_sound": _geometry_sound,
 }
 
 

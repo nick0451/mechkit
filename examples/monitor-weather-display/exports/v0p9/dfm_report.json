@@ -1,0 +1,195 @@
+{
+ "printing": {
+  "process": "printing",
+  "checker": "text-to-cad cad 0.11.17",
+  "rules": "text-to-cad general rules (published design guides, cited per finding); not a named shop's or this printer's limits",
+  "settings": {
+   "material": "petg",
+   "technology": "fdm",
+   "nozzle": 0.4,
+   "build_volume": [
+    256,
+    256,
+    256
+   ]
+  },
+  "status": "pass",
+  "parts": {
+   "Pod": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 2,
+    "issues": [
+     {
+      "severity": "warning",
+      "code": "printing.overhang_angle",
+      "message": "down-facing surface angle from horizontal 0 deg is under the 45 deg recommended minimum",
+      "location": "face 26",
+      "hint": "support it, chamfer it to at least 45 deg from horizontal, or turn the part",
+      "rule": "printing.overhang_angle",
+      "value": 0.0,
+      "limit": 45.0,
+      "unit": "deg",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     },
+     {
+      "severity": "warning",
+      "code": "printing.overhang_angle",
+      "message": "down-facing surface angle from horizontal 0 deg is under the 45 deg recommended minimum",
+      "location": "face 29",
+      "hint": "support it, chamfer it to at least 45 deg from horizontal, or turn the part",
+      "rule": "printing.overhang_angle",
+      "value": 0.0,
+      "limit": 45.0,
+      "unit": "deg",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     }
+    ],
+    "summary": "OK shape: 2 warning(s); printing fdm: 8358.21 mm3, 1 body(ies); overhangs under 45 deg 2.98 mm2; walls min 0.9, p05 1.2, median 6 mm; support ~32.04 mm3"
+   },
+   "Cover": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 0,
+    "issues": [],
+    "summary": "OK shape: printing fdm: 4544.98 mm3, 1 body(ies); overhangs under 45 deg 0 mm2; walls min 2, p05 2, median 2 mm; support ~0 mm3"
+   },
+   "Clamp": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 2,
+    "issues": [
+     {
+      "severity": "warning",
+      "code": "printing.overhang_angle",
+      "message": "down-facing surface angle from horizontal 0 deg is under the 45 deg recommended minimum",
+      "location": "face 26",
+      "hint": "support it, chamfer it to at least 45 deg from horizontal, or turn the part",
+      "rule": "printing.overhang_angle",
+      "value": 0.0,
+      "limit": 45.0,
+      "unit": "deg",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     },
+     {
+      "severity": "warning",
+      "code": "printing.bridge_length",
+      "message": "bridge span 6 mm is over the 5 mm recommended maximum",
+      "location": "face 6",
+      "hint": "add a support or a pillar so no span exceeds 5 mm",
+      "rule": "printing.bridge_length",
+      "value": 5.999999916,
+      "limit": 5.0,
+      "unit": "mm",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     }
+    ],
+    "summary": "OK shape: 2 warning(s); printing fdm: 23260.4 mm3, 1 body(ies); overhangs under 45 deg 5.52 mm2; walls min 1.2, p05 3, median 6 mm; support ~797.35 mm3"
+   },
+   "Jaw": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 0,
+    "issues": [],
+    "summary": "OK shape: printing fdm: 2354.28 mm3, 1 body(ies); overhangs under 45 deg 0 mm2; walls min 1.8, p05 3, median 3 mm; support ~0 mm3"
+   },
+   "Knob": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 0,
+    "issues": [],
+    "summary": "OK shape: printing fdm: 1824.48 mm3, 1 body(ies); overhangs under 45 deg 0 mm2; walls min 4.4, p05 4.5677, median 9 mm; support ~0 mm3"
+   },
+   "Bezel": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 0,
+    "issues": [],
+    "summary": "OK shape: printing fdm: 2387.9 mm3, 1 body(ies); overhangs under 45 deg 0 mm2; walls min 0.8083, p05 1.9791, median 3 mm; support ~9.93 mm3"
+   },
+   "Board_Cap": {
+    "status": "pass",
+    "reason": null,
+    "errors": 0,
+    "warnings": 2,
+    "issues": [
+     {
+      "severity": "warning",
+      "code": "printing.overhang_angle",
+      "message": "down-facing surface angle from horizontal 0 deg is under the 45 deg recommended minimum",
+      "location": "face 14",
+      "hint": "support it, chamfer it to at least 45 deg from horizontal, or turn the part",
+      "rule": "printing.overhang_angle",
+      "value": 0.0,
+      "limit": 45.0,
+      "unit": "deg",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     },
+     {
+      "severity": "warning",
+      "code": "printing.bridge_length",
+      "message": "bridge span 9.8 mm is over the 5 mm recommended maximum",
+      "location": "face 7",
+      "hint": "add a support or a pillar so no span exceeds 5 mm",
+      "rule": "printing.bridge_length",
+      "value": 9.799999878,
+      "limit": 5.0,
+      "unit": "mm",
+      "source": "Protolabs Network (Hubs), How to design parts for FDM 3D printing"
+     }
+    ],
+    "summary": "OK shape: 2 warning(s); printing fdm: 2529.57 mm3, 1 body(ies); overhangs under 45 deg 19.6 mm2; walls min 0.9, p05 1.2, median 1.6 mm; support ~241.92 mm3"
+   }
+  }
+ },
+ "geometry": {
+  "Pod": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Cover": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Clamp": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Jaw": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Knob": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Bezel": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  },
+  "Board_Cap": {
+   "status": "pass",
+   "sound": true,
+   "topology_errors": [],
+   "self_intersections": []
+  }
+ }
+}

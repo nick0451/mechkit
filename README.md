@@ -19,7 +19,9 @@ honest:
   stand-in solid, so the design is checked against what it has to fit.
 - **Geometry as code.** Parts are plain Python functions on [build123d](https://github.com/gumyr/build123d)
   (OpenCascade). No CAD window is needed; a build runs in seconds and can be repeated exactly.
-- **Checks that return data.** Overlaps and clearances between parts, requirement results, print sizes.
+- **Checks that return data.** Overlaps and clearances between parts, requirement results, print sizes, and
+  manufacturability: 3D-printing rules (walls, overhangs, bed contact), solid soundness, and laser / sheet cut files,
+  each finding at a face or entity with its published source (via [text-to-cad](https://github.com/earthtojake/text-to-cad)).
 - **Mechanical simulation.** STEP -> gmsh -> [CalculiX](https://www.calculix.de) static analysis with load cases
   placed by geometric selectors, two-mesh convergence, and a pass / fail judgement. Results carry a tag too:
   *calibrated* or *assumed*. An assumed result may rank options; it never approves a design, and neither does one
@@ -28,6 +30,7 @@ honest:
   the pre-print review, and anything that touches real hardware.
 - **A front end for the person.** MechKit Studio: 3D view, exploded view, parts table, and two printable outputs,
   an exploded sheet and a step-by-step assembly guide with wiring, tools and commissioning pages.
+- **Engineering drawings.** A dimensioned PDF sheet per part; every number is measured from the solid.
 - **Firmware alongside.** One `pinmap.json` per project feeds both the firmware header and the guide's wiring page.
 
 ## The worked example
@@ -51,9 +54,10 @@ that were printed, assembled and mounted, over nine revisions driven by one-line
 | Project spin-up with the folder gate | Material data: the printed-PETG card is **assumed**; the calibration tooling exists but no measured prints back it yet | Tolerance stack-ups from measured printer behaviour |
 | Requirement checks | Printed pages were checked on screen, not yet on paper | Motion simulation (tipping, mechanisms) |
 | Headless CAD helpers (build123d) | Autodesk Fusion bridge: experimental, needs a separate add-in that is not part of this repository | Parameter optimisation |
-| Structural simulation with a known-answer benchmark | Developed and tested on Windows 11 only | Laser-cut / sheet parts, and with them builds in more than one material and process |
-| Presentation manifest, labelled picture sheets | | A process-neutral part description |
-| MechKit Studio: viewer, exploded sheet, assembly guide | | |
+| Structural simulation with a known-answer benchmark | Developed and tested on Windows 11 only | A worked laser-cut build, and with it builds in more than one material and process |
+| Presentation manifest, labelled picture sheets | Manufacturability rules are general published guidance, not tuned to a printer or shop | A process-neutral part description |
+| MechKit Studio: viewer, exploded sheet, assembly guide | Laser / sheet: cut-file checks and flat patterns work; no worked example yet | |
+| Printing and geometry checks, engineering drawings | | |
 
 Today the only fabrication process is filament 3D printing. Multi-material, multi-process builds are the direction,
 not a shipped feature.
@@ -99,13 +103,15 @@ uv run python tests/test_phase0.py        # spin-up, gate, requirements
 uv run python tests/test_phase1.py        # simulation chain (skipped without the solver)
 uv run python tests/test_present.py       # manifest, layout, sheets
 uv run python tests/test_studio.py        # Studio backend
+uv run python tests/test_fab.py           # manufacturability checks, flat patterns, drawings
 cd studio/web && npm test                 # web app logic
 ```
 
 ## Working with an agent
 
-Open the folder in Claude Code (or another coding agent that reads a project instruction file). [`CLAUDE.md`](CLAUDE.md)
-tells it how the kit is used: the gates, the rules about dimensions and simulation results, the commands, and the
+Open the folder in Claude Code (or another coding agent that reads a project instruction file). The instructions are
+one skill, [`skills/mechkit/SKILL.md`](skills/mechkit/SKILL.md), which [`CLAUDE.md`](CLAUDE.md) imports and
+[`AGENTS.md`](AGENTS.md) points other agents to. It tells it how the kit is used: the gates, the rules about dimensions and simulation results, the commands, and the
 mistakes already paid for. A typical session is a few sentences from you ("a display that clips under my monitor,
 tilted slightly up; the monitor is 21.5 mm thick"), questions back at the gates, print files, and then your
 one-line fit reports turning into the next revision.
@@ -131,8 +137,11 @@ calibration/        test-bar definitions for measuring a printed material
 
 ## Built on
 
-build123d and OpenCascade (geometry), gmsh (meshing), CalculiX (solver, GPL, not distributed here), PyVista
-(pictures), FastAPI and uvicorn (Studio backend), React and three.js (Studio front end). Each keeps its own licence.
+build123d and OpenCascade (geometry), [text-to-cad](https://github.com/earthtojake/text-to-cad)'s `cad` library
+(manufacturability checks, flat patterns, drawings; MIT, used as a dependency, its `cad` command and telemetry are not
+run), gmsh (meshing, GPL, installed as a dependency, not bundled), CalculiX (solver, GPL, not distributed here),
+PyVista (pictures), FastAPI and uvicorn (Studio backend), React and three.js (Studio front end). Each keeps its own
+licence.
 
 The name: an unrelated continuum-mechanics package is published on PyPI as `mechkit`. This project is not on PyPI.
 
