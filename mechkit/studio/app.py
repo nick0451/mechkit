@@ -60,13 +60,15 @@ def _child_dirs(folder):
 
 
 def versions_of(project_dir):
-    """[(version, manifest path)] of one project folder, newest manifest first."""
+    """[(version, manifest path)] of one project folder, newest revision first (by name, see mechkit.revisions)."""
+    from .. import revisions
+
     found = []
     for name, d in _child_dirs(Path(project_dir) / "exports").items():
         m = d / "presentation" / "manifest.json"
         if m.is_file():
-            found.append((m.stat().st_mtime_ns, name, m))
-    found.sort(key=lambda t: (t[0], t[1]), reverse=True)
+            found.append((revisions.key(name), name, m))
+    found.sort(key=lambda t: t[0], reverse=True)
     return [(name, m) for _, name, m in found]
 
 

@@ -96,8 +96,11 @@ def moved_box(entry):
 
 
 def exploded_overlaps(items, min_volume=0.5):
-    """Pairs of items that still run into each other after their explode moves: [(key, key, mm3)]. Needs the solids."""
+    """Pairs of items that still run into each other after their explode moves: [(key, key, mm3)]. Needs the solids.
+    mm3 is None when the overlap could not be computed: treat that as a problem, not as clear."""
     import build123d as bd
+
+    from ..kernel.b3d import GeometryCheckError, overlap_volume
 
     shown = [(it["key"], bd.Pos(*it["explode"]) * it["solid"]) for it in items if it["kind"] != "reference"]
     boxes = [s.bounding_box() for _, s in shown]
@@ -109,9 +112,10 @@ def exploded_overlaps(items, min_volume=0.5):
                     or a.max.Z <= b.min.Z or b.max.Z <= a.min.Z):
                 continue
             try:
-                vol = (shown[i][1] & shown[j][1]).volume
-            except Exception:
-                vol = 0.0
+                vol = overlap_volume(shown[i][1], shown[j][1])
+            except GeometryCheckError:
+                found.append((shown[i][0], shown[j][0], None))
+                continue
             if vol > min_volume:
                 found.append((shown[i][0], shown[j][0], round(vol, 2)))
     return found
@@ -202,13 +206,18 @@ def table(data):
 
 
 def write(project_dir, version, title, items, views, cloud_folder=None, gap=60.0, steps=None, guide=None):
-    """Save every item's STEP file and the manifest. Returns the manifest path. Raises ValueError on a bad manifest."""
+    """Save every item's STEP file and the manifest. Returns the manifest path. Raises ValueError on a bad manifest.
+    Everything is written into a staging folder first and swapped in at the end: a failed or interrupted write leaves
+    the previous presentation untouched, never a mix of old and new files."""
+    import shutil
+
     import build123d as bd
 
-    out = Path(project_dir) / "exports" / version / "presentation"
-    out.mkdir(parents=True, exist_ok=True)
-    for old in out.glob("*.step"):
-        old.unlink()
+    final = Path(project_dir) / "exports" / version / "presentation"
+    out = final.with_name("presentation.staging")
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
     parts = []
     for it in items:
         solid = it["solid"]
@@ -240,21 +249,31 @@ def write(project_dir, version, title, items, views, cloud_folder=None, gap=60.0
     data["table"] = table(data)
     problems = validate(data)
     if problems:
+        shutil.rmtree(out, ignore_errors=True)
         raise ValueError("presentation manifest is not usable:\n  " + "\n  ".join(problems))
-    path = out / "manifest.json"
-    path.write_text(json.dumps(data, indent=1), encoding="utf-8", newline="\n")
-    return path
+    (out / "manifest.json").write_text(json.dumps(data, indent=1), encoding="utf-8", newline="\n")
+    old = final.with_name("presentation.old")
+    if old.exists():
+        shutil.rmtree(old)
+    if final.exists():
+        final.rename(old)
+    out.rename(final)
+    shutil.rmtree(old, ignore_errors=True)
+    return final / "manifest.json"
 
 
 def find(project_dir, version=None):
-    """Path of a project's manifest: the given version, else the newest one written."""
+    """Path of a project's manifest: the given version, else the newest revision that has one (by revision name, see
+    mechkit.revisions; file times are not used)."""
+    from .. import revisions
+
     exports = Path(project_dir) / "exports"
     if version:
         return exports / version / "presentation" / "manifest.json"
-    found = sorted(exports.glob("*/presentation/manifest.json"), key=lambda p: p.stat().st_mtime)
+    found = [d / "presentation" / "manifest.json" for _, d in revisions.folders(project_dir) if (d / "presentation" / "manifest.json").is_file()]
     if not found:
         raise FileNotFoundError("no presentation manifest under %s: run the project's build first" % exports)
-    return found[-1]
+    return found[0]
 
 
 def load(path):

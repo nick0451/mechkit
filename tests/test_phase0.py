@@ -16,7 +16,7 @@ from pathlib import Path
 
 KIT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(KIT))
-from mechkit import project, requirements  # noqa: E402
+from mechkit import project, requirements, revisions  # noqa: E402
 
 results = []
 
@@ -99,6 +99,35 @@ def main():
               and (shared / "peg" / "state.md").is_file() and "../CLAUDE.md" in r["created"] and "../CLAUDE.md" not in r2["created"])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    print("check exit codes: unchecked is never success")
+    rs = lambda *s: [{"status": x} for x in s]  # noqa: E731
+    check("all pass -> 0", requirements.exit_code(rs("pass", "pass")) == 0)
+    check("any fail -> 1", requirements.exit_code(rs("pass", "fail", "not evaluated")) == 1)
+    check("NEGATIVE: not evaluated -> 2, not 0", requirements.exit_code(rs("pass", "not evaluated")) == 2)
+    check("NEGATIVE: waiting for a person -> 2, not 0", requirements.exit_code(rs("pass", "manual")) == 2)
+
+    print("which revision is newest (by name, never by file time)")
+    tmp = Path(tempfile.mkdtemp(prefix="mechkit_rev_"))
+    try:
+        for name in ("v0p9", "v0p10", "v0p2", "notes"):
+            (tmp / "exports" / name).mkdir(parents=True)
+        (tmp / "exports" / "v0p9" / "touched").write_text("newest file time")
+        check("v0p10 is newer than v0p9 and v0p2", revisions.newest(tmp).name == "v0p10", revisions.newest(tmp))
+        check("export_v26 style names count too", revisions.key("export_v26") > revisions.key("export_v9"))
+        check("unnumbered folders come last", [n for n, _ in revisions.folders(tmp)][-1] == "notes")
+        check("requirements use the same rule", requirements.newest_export(tmp).name == "v0p10")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    print("overlap checks fail closed")
+    from mechkit.kernel import b3d
+    import build123d as bd
+    check("two boxes sharing a 0.5 mm cube -> 0.125 mm3", abs(b3d.overlap_volume(bd.Box(2, 2, 2), bd.Pos(1.5, 1.5, 1.5) * bd.Box(2, 2, 2)) - 0.125) < 1e-6)
+    invalid = type("Invalid", (), {"is_valid": False})()
+    broken = type("Broken", (), {"is_valid": True, "__and__": lambda self, other: 1 / 0})()
+    check("NEGATIVE: an invalid solid raises, it is not 'no overlap'", raises(b3d.GeometryCheckError, lambda: b3d.overlap_volume(invalid, bd.Box(1, 1, 1))))
+    check("NEGATIVE: a failed boolean raises, it is not 'no overlap'", raises(b3d.GeometryCheckError, lambda: b3d.overlap_volume(broken, bd.Box(1, 1, 1))))
 
     print("requirements against real reports (read-only)")
     env = os.environ.get("MECHKIT_TEST_EXPORT_PROJECT", "")

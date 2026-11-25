@@ -12,11 +12,19 @@
 Each check reads one report file (the newest export folder by default): stability.json, print_estimates.json,
 sim_report.json, mount_checks.json. A missing report gives "not evaluated", never a silent pass.
 Statuses: pass | fail | not evaluated | manual (waiting for a person).
+`python -m mechkit check` exits 0 only when every requirement passes, 1 when any fails, 2 when none fails but some are
+not evaluated or still waiting for a person: an unchecked requirement is never reported as success.
+
+A strength result counts only when it is clean and current: no problems or solver warnings, the two mesh sizes agree,
+the STEP file simulated is byte-for-byte the one in the project now (sha256), and the material is calibrated with a
+calibration record. Otherwise it is "not evaluated" (or "fail" when it failed).
 """
 
+import hashlib
 import json
-import re
 from pathlib import Path
+
+from . import revisions
 
 
 def _load(folders, name):
@@ -28,7 +36,7 @@ def _load(folders, name):
     return None
 
 
-def _stability_min_ratio(check, reports):
+def _stability_min_ratio(check, reports, project=None):
     s = _load(reports, "stability.json")
     if s is None:
         return "not evaluated", "no stability.json"
@@ -38,7 +46,7 @@ def _stability_min_ratio(check, reports):
         worst["action"], worst["tips_at_n"], ratio, worst["force_n"], check["min"])
 
 
-def _print_time_max_h(check, reports):
+def _print_time_max_h(check, reports, project=None):
     e = _load(reports, "print_estimates.json")
     if e is None or e.get("problems"):
         return "not evaluated", "no usable print_estimates.json"
@@ -46,14 +54,14 @@ def _print_time_max_h(check, reports):
     return ("pass" if hours <= check["max"] else "fail"), "%.1f h estimated (limit %.1f h)" % (hours, check["max"])
 
 
-def _filament_max_g(check, reports):
+def _filament_max_g(check, reports, project=None):
     e = _load(reports, "print_estimates.json")
     if e is None or e.get("problems"):
         return "not evaluated", "no usable print_estimates.json"
     return ("pass" if e["total_g"] <= check["max"] else "fail"), "%.0f g estimated (limit %.0f g)" % (e["total_g"], check["max"])
 
 
-def _parts_fit_bed(check, reports):
+def _parts_fit_bed(check, reports, project=None):
     e = _load(reports, "print_estimates.json")
     if e is None:
         return "not evaluated", "no print_estimates.json"
@@ -65,22 +73,58 @@ def _parts_fit_bed(check, reports):
     return ("pass" if not big else "fail"), "%d files on a %g mm bed%s" % (len(e["files"]), bed, "; too big: %s" % big if big else "")
 
 
-def _strength_min_safety_factor(check, reports):
+def _sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _stale(case, project):
+    """Why a case's result may not describe the current geometry, or None when it does."""
+    if not case.get("step") or not case.get("step_sha256"):
+        return "the result does not record which geometry it was run on: run the simulation again"
+    if project is None:
+        return "no project folder given, so the simulated geometry cannot be compared with the current one"
+    step = Path(project) / case["step"]
+    if not step.is_file():
+        return "%s no longer exists" % case["step"]
+    if _sha256(step) != case["step_sha256"]:
+        return "%s changed after it was simulated: run the simulation again" % case["step"]
+    return None
+
+
+def _strength_min_safety_factor(check, reports, project=None):
     s = _load(reports, "sim_report.json")
     if s is None:
         return "not evaluated", "no sim_report.json"
     cases = [c for c in s["cases"] if check.get("case") in (None, c["case"])]
     if not cases:
         return "not evaluated", "no matching load case"
-    worst = min(cases, key=lambda c: c.get("safety_factor", 0))
-    status = "pass" if worst.get("safety_factor", 0) >= check["min"] else "fail"
+    if any(not isinstance(c.get("safety_factor"), (int, float)) for c in cases):
+        return "not evaluated", "a matching case has no safety factor"
+    worst = min(cases, key=lambda c: c["safety_factor"])
     tag = worst.get("material", {}).get("tag", "assumed")
-    if status == "pass" and tag != "calibrated" and check.get("calibrated_only", True):
-        return "not evaluated", "safety factor %.2f, but the material is only '%s': calibrate before relying on it" % (worst["safety_factor"], tag)
-    return status, "lowest safety factor %.2f in case %s (need %.2f; material %s)" % (worst.get("safety_factor", 0), worst["case"], check["min"], tag)
+    detail = "lowest safety factor %.2f in case %s (need %.2f; material %s)" % (worst["safety_factor"], worst["case"], check["min"], tag)
+    failed = ["%s: %s" % (c["case"], p) for c in cases for p in c.get("problems", [])]
+    if worst["safety_factor"] < check["min"] or failed:
+        return "fail", detail + ("; " + "; ".join(failed) if failed else "")
+    for c in cases:                                            # a pass counts only when every matching case is clean
+        stale = _stale(c, project)
+        if stale:
+            return "not evaluated", "%s: %s" % (c["case"], stale)
+        if not c.get("converged", False):
+            return "not evaluated", "%s: the mesh sizes disagree (stress on a sharp corner): refine before relying on it" % c["case"]
+        solver = [w for w in c.get("warnings", []) if w.startswith("SOLVER")]
+        if solver:
+            return "not evaluated", "%s: solver warning: %s" % (c["case"], solver[0])
+    if check.get("calibrated_only", True):
+        m = worst.get("material", {})
+        if tag != "calibrated":
+            return "not evaluated", "safety factor %.2f, but the material is only '%s': calibrate before relying on it" % (worst["safety_factor"], tag)
+        if not m.get("calibration"):
+            return "not evaluated", "safety factor %.2f, but material '%s' is tagged calibrated without a calibration record" % (worst["safety_factor"], m.get("name"))
+    return "pass", detail
 
 
-def _mounts_pass(check, reports):
+def _mounts_pass(check, reports, project=None):
     rows = _load(reports, "mount_checks.json")
     if rows is None:
         return "not evaluated", "no mount_checks.json"
@@ -99,12 +143,12 @@ CHECKS = {
 
 
 def newest_export(project):
-    folders = [p for p in (Path(project) / "exports").glob("*_v*") if p.is_dir() and re.search(r"_v(\d+)$", p.name)]
-    return max(folders, key=lambda p: int(re.search(r"_v(\d+)$", p.name).group(1))) if folders else None
+    return revisions.newest(project)
 
 
-def evaluate(requirements, reports):
-    """[{id, text, status, detail}] for a list of requirement dicts against a folder of report files."""
+def evaluate(requirements, reports, project=None):
+    """[{id, text, status, detail}] for a list of requirement dicts against a folder of report files.
+    project: the project folder, needed to confirm that simulation results match the current geometry."""
     out = []
     for r in requirements:
         check = r.get("check", {"type": "manual"})
@@ -118,7 +162,7 @@ def evaluate(requirements, reports):
         elif reports is None:
             status, detail = "not evaluated", "no report folder yet"
         else:
-            status, detail = CHECKS[kind](check, reports)
+            status, detail = CHECKS[kind](check, reports, project)
         out.append({"id": r["id"], "text": r["text"], "status": status, "detail": detail})
     return out
 
@@ -130,7 +174,7 @@ def check_project(project, reports=None):
     data = json.loads((project / "requirements.json").read_text(encoding="utf-8"))
     reports = Path(reports) if reports else newest_export(project)
     places = [p for p in (reports, project / "sim" / "reports") if p is not None and Path(p).is_dir()]     # export folder, then sim reports
-    return evaluate(data["requirements"], places or None), reports
+    return evaluate(data["requirements"], places or None, project), reports
 
 
 def print_results(results, reports):
@@ -142,3 +186,10 @@ def print_results(results, reports):
     for r in results:
         counts[r["status"]] = counts.get(r["status"], 0) + 1
     print(", ".join("%d %s" % (n, s) for s, n in sorted(counts.items())))
+
+
+def exit_code(results):
+    """0 = every requirement passes, 1 = at least one fails, 2 = none fails but some are not evaluated or waiting."""
+    if any(r["status"] == "fail" for r in results):
+        return 1
+    return 0 if all(r["status"] == "pass" for r in results) else 2

@@ -45,6 +45,23 @@ def load_materials():
     return json.loads((KIT_ROOT / "mechkit" / "materials.json").read_text(encoding="utf-8"))["materials"]
 
 
+def material_problem(name, m):
+    """Why a material card cannot be used as it is tagged, or None. A 'calibrated' card must say where its numbers came
+    from: calibration = {"date", "bars" (the measurements, as `python -m mechkit.calibration fit` prints them),
+    "print_settings"}."""
+    if m.get("tag") == "calibrated":
+        c = m.get("calibration")
+        missing = [k for k in ("date", "bars", "print_settings") if not (isinstance(c, dict) and c.get(k))]
+        if missing:
+            return "material '%s' is tagged calibrated but its calibration record lacks %s" % (name, ", ".join(missing))
+    return None
+
+
+def _sha256(path):
+    import hashlib
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
 def _unit(v):
     v = np.asarray(v, dtype=float)
     return v / np.linalg.norm(v)
@@ -118,10 +135,14 @@ def run_part(part, project_root, out_dir, materials=None, pictures=True):
     """Run every case of one part on its mesh sizes. Returns the list of case results (plain data)."""
     materials = materials or load_materials()
     m = materials[part["material"]]
+    bad = material_problem(part["material"], m)
+    if bad:
+        raise ValueError(bad)
     material = ccx.Material(part["material"], m["e_mpa"], m["nu"], m["strength_mpa"], m["tag"])
     across = m["strength_mpa"] * m["across_layers_factor"]
     project_root, out_dir = Path(project_root), Path(out_dir)
     sizes = sorted(part["mesh_sizes"], reverse=True)
+    step_hash = _sha256(project_root / part["step"])            # binds every result to the exact geometry simulated
     meshes = {s: step_mesh(project_root / part["step"], s, keep_bbox=part.get("keep_bbox")) for s in sizes}
     results = []
     for case in part["cases"]:
@@ -138,8 +159,9 @@ def run_part(part, project_root, out_dir, materials=None, pictures=True):
         strength = m["strength_mpa"] if layers == "in_plane" else across
         sf = strength / fine["peak_stress_mpa"]
         res = {
-            "part": part["name"], "case": case["name"], "layers": layers,
-            "material": {"name": part["material"], "tag": m["tag"], "e_mpa": m["e_mpa"], "strength_mpa": m["strength_mpa"], "strength_used_mpa": strength},
+            "part": part["name"], "case": case["name"], "layers": layers, "step": Path(part["step"]).as_posix(), "step_sha256": step_hash,
+            "material": {"name": part["material"], "tag": m["tag"], "e_mpa": m["e_mpa"], "strength_mpa": m["strength_mpa"], "strength_used_mpa": strength,
+                         "calibration": m.get("calibration")},
             "applied_force_n": fine["applied_force_n"], "reaction_n": fine["reaction_n"],
             "max_deflection_mm": fine["max_displacement_mm"], "peak_stress_mpa": fine["peak_stress_mpa"], "peak_stress_at": fine["peak_stress_at"],
             "p99_stress_mpa": fine["p99_von_mises_mpa"], "stress_at_supports_mpa": fine["stress_at_supports_mpa"],
@@ -188,7 +210,9 @@ def run_file(loadcases_path, out_dir=None, pictures=True):
         source = Path(path).name
     report = {"source": source, "solver": ccx.find_ccx().name, "cases": cases,
               "problems": ["%s / %s: %s" % (c["part"], c["case"], p) for c in cases for p in c["problems"]]}
-    (out_dir / "sim_report.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
+    tmp = out_dir / "sim_report.json.tmp"                      # written whole, then swapped in: never a half-written report
+    tmp.write_text(json.dumps(report, indent=1), encoding="utf-8")
+    tmp.replace(out_dir / "sim_report.json")
     return report
 
 

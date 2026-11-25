@@ -69,7 +69,10 @@ def main():
         for h in (10.0, 3.0):
             built_mesh(beam(h), 3.0, step_out=project / "sim" / "geometry" / ("beam_%g.step" % h))
         materials = {"test_assumed": {"tag": "assumed", "e_mpa": 2000.0, "nu": 0.35, "strength_mpa": 40.0, "across_layers_factor": 0.5},
-                     "test_calibrated": {"tag": "calibrated", "e_mpa": 2000.0, "nu": 0.35, "strength_mpa": 40.0, "across_layers_factor": 0.5}}
+                     "test_calibrated": {"tag": "calibrated", "e_mpa": 2000.0, "nu": 0.35, "strength_mpa": 40.0, "across_layers_factor": 0.5,
+                                         "calibration": {"date": "2026-11-25", "bars": {"flat": {"weight_g": 200, "sag_mm": 4.1}},
+                                                         "print_settings": "test: 0.2 mm layers, 3 walls"}},
+                     "test_calibrated_unbacked": {"tag": "calibrated", "e_mpa": 2000.0, "nu": 0.35, "strength_mpa": 40.0, "across_layers_factor": 0.5}}
 
         def part(h, material, layers="in_plane"):
             return {"name": "beam %g" % h, "step": "sim/geometry/beam_%g.step" % h, "mesh_sizes": [3.0, 2.0], "material": material, "layers": layers,
@@ -94,13 +97,43 @@ def main():
         req = [{"id": "S1", "text": "strong enough", "check": {"type": "strength_min_safety_factor", "min": 3.0}}]
         out.mkdir(parents=True, exist_ok=True)
         (out / "sim_report.json").write_text(json.dumps({"cases": [thick]}, default=str))
-        r = requirements.evaluate(req, [out])[0]
+        r = requirements.evaluate(req, [out], project)[0]
         check("assumed material + safety factor 6.7 -> 'not evaluated', not a pass", r["status"] == "not evaluated" and "calibrate" in r["detail"], r)
+        check("NEGATIVE: a card tagged calibrated without a calibration record is refused by the simulation",
+              _raises(ValueError, lambda: loadcase.run_part(part(10.0, "test_calibrated_unbacked"), project, out, materials, pictures=False)))
         cal = loadcase.run_part(part(10.0, "test_calibrated"), project, out, materials, pictures=False)[0]
+        check("each result records the STEP file and its sha256", cal["step"] == "sim/geometry/beam_10.step" and len(cal["step_sha256"]) == 64)
         (out / "sim_report.json").write_text(json.dumps({"cases": [cal]}, default=str))
-        check("calibrated material -> pass", requirements.evaluate(req, [out])[0]["status"] == "pass")
+        check("calibrated material -> pass", requirements.evaluate(req, [out], project)[0]["status"] == "pass")
+        r = requirements.evaluate(req, [out])[0]
+        check("without the project folder the geometry cannot be confirmed -> 'not evaluated'", r["status"] == "not evaluated", r)
+
+        def report_with(**change):
+            c = json.loads(json.dumps(cal, default=str))
+            for k, v in change.items():
+                if k == "material":
+                    c["material"].update(v)
+                else:
+                    c[k] = v
+            (out / "sim_report.json").write_text(json.dumps({"cases": [c]}, default=str))
+            return requirements.evaluate(req, [out], project)[0]
+        r = report_with(converged=False)
+        check("NEGATIVE: mesh sizes disagree -> 'not evaluated'", r["status"] == "not evaluated" and "mesh" in r["detail"], r)
+        r = report_with(warnings=["SOLVER: did not converge"])
+        check("NEGATIVE: a solver warning -> 'not evaluated'", r["status"] == "not evaluated" and "solver" in r["detail"], r)
+        r = report_with(problems=["reaction does not balance the applied force (check the supports)"])
+        check("NEGATIVE: a case with a problem fails even with a high safety factor", r["status"] == "fail" and "reaction" in r["detail"], r)
+        r = report_with(material={"calibration": None})
+        check("NEGATIVE: a report whose calibrated material has no record -> 'not evaluated'", r["status"] == "not evaluated" and "record" in r["detail"], r)
+        r = report_with(step_sha256=None)
+        check("NEGATIVE: a result without a geometry hash -> 'not evaluated'", r["status"] == "not evaluated" and "geometry" in r["detail"], r)
+        (out / "sim_report.json").write_text(json.dumps({"cases": [cal]}, default=str))
+        step = project / "sim" / "geometry" / "beam_10.step"
+        step.write_bytes(step.read_bytes() + b"\n")
+        r = requirements.evaluate(req, [out], project)[0]
+        check("NEGATIVE: the STEP file changed after the simulation -> 'not evaluated'", r["status"] == "not evaluated" and "changed" in r["detail"], r)
         (out / "sim_report.json").write_text(json.dumps({"cases": [thin]}, default=str))
-        check("the thin beam -> fail, whatever the tag", requirements.evaluate(req, [out])[0]["status"] == "fail")
+        check("the thin beam -> fail, whatever the tag", requirements.evaluate(req, [out], project)[0]["status"] == "fail")
 
         print("calibration maths")
         f = 0.2 * 9.81

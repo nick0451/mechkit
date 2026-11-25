@@ -245,7 +245,7 @@ def make_sample(tmp):
     new = manifest.write(root / "Sample box", "v2", "Sample", items, views, steps=steps)
     mid = manifest.write(root / "Sample box", "v1b", "Sample", items[:2], views)
     now = time.time()
-    for path, age in ((old, 3000), (mid, 2000), (new, 1000)):               # v2 newest, then v1b, then v1 (not name order)
+    for path, age in ((old, 1000), (mid, 2000), (new, 3000)):               # file times say v1 is newest: they must be ignored
         for f in path.parent.iterdir():
             os.utime(f, (now - age, now - age))
     manifest.write(root / "Another", "v1", "Another thing", items[:1], views[:1])
@@ -275,7 +275,7 @@ def test_sample(tmp):
               and all(sorted(p) == ["id", "name", "versions"] for p in listing["projects"]), str(ids))
         sample = listing["projects"][1]
         check("project name comes from the manifest, id is the folder name", sample["name"] == "Sample" and listing["projects"][0]["name"] == "Another thing")
-        check("versions newest first by manifest time (not by name)", sample["versions"] == ["v2", "v1b", "v1"], str(sample["versions"]))
+        check("versions newest first by revision name, not file time; unnumbered names last", sample["versions"] == ["v2", "v1", "v1b"], str(sample["versions"]))
 
         print("manifest")
         base = "/api/projects/%s" % quote("Sample box")

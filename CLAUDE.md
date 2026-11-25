@@ -67,11 +67,15 @@ Commands: `python -m mechkit propose | new | check <project> | sim <project> | p
    off a picture) or **assumed**, and ask about assumed ones that matter.
 3. Results are tagged like dimensions: **calibrated** (matched to a printed test) or **assumed**. An assumed
    simulation can rank options; it does not approve a design (`requirements.py` enforces this for strength).
+   A strength result counts only when it is clean and current: no problems or solver warnings, the mesh sizes agree,
+   the simulated STEP file is unchanged (sha256), and a calibrated material card carries a `calibration` record
+   (date, bars, print_settings). `mechkit check` exits 0 only when everything passes (1 fail, 2 anything unchecked).
 4. Units: mm, N, MPa, grams in reports.
 5. Each bought part gets `parts/purchased/<part>/interface.json` (dimensions with tags + how it mounts). Scripts read
    those values; a number from a bought part is never copied into a script.
 6. New parts are plain functions of (parameters, inputs) on `mechkit/kernel/b3d.py`. Give bought parts stand-in solids
-   so fit can be checked (`overlap` checks in the example's build script).
+   so fit can be checked with `b3d.overlap_volume`. It raises when it cannot compute an overlap: report that as a
+   problem, never as clear. Revisions are ordered by name (`mechkit/revisions.py`: v0p10 > v0p9), never by file time.
 7. Pin assignments live in the project's `pinmap.json` only; the firmware header and the wiring page are generated from it.
 8. Presentation: a project's build writes `exports/<version>/presentation/manifest.json` (see the example's
    `present_items`, `present_steps`, `present_guide`). Each assembly step says where its picture is taken from and how

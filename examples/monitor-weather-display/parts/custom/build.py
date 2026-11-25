@@ -395,10 +395,15 @@ def insert_items(p):
 
 
 # ------------------------------------------------------------------------------------------------ assemble, check, export
-def overlap(a, b):
+UNCHECKED = []      # overlap checks that could not be computed; checks() reports each one as a problem
+
+
+def overlap(a, b, what="overlap"):
+    """Shared volume in mm3. A check that cannot be computed is recorded as a problem, never read as 'no overlap'."""
     try:
-        return (a & b).volume
-    except Exception:
+        return b3d.overlap_volume(a, b)
+    except b3d.GeometryCheckError as e:
+        UNCHECKED.append("%s could not be checked: %s" % (what, e))
         return 0.0
 
 
@@ -426,19 +431,20 @@ def checks(p, world, extras, info):
     names = list(world)
     for i, a in enumerate(names):
         for b in names[i + 1:]:
-            v = overlap(world[a], world[b])
+            v = overlap(world[a], world[b], "%s / %s" % (a, b))
             if v > 0.5:
                 problems.append("%s and %s overlap by %.1f mm3" % (a, b, v))
     for name in ("display_pcb", "display_screen", "board"):
         for part in names:
-            v = overlap(extras[name], world[part])
+            v = overlap(extras[name], world[part], "%s / %s" % (name, part))
             if v > 0.5:
                 problems.append("%s collides with %s (%.1f mm3)" % (name, part, v))
     monitor = bd.Pos(0, -p["mon_thick"] / 2, 50) * bd.Box(200, p["mon_thick"], 100)
     for part in ("Pod", "Cover", "Clamp", "Bezel", "Board_Cap"):
-        v = overlap(monitor, world[part])
+        v = overlap(monitor, world[part], "monitor / %s" % part)
         if v > 0.5:
             problems.append("%s cuts into the monitor (%.1f mm3)" % (part, v))
+    problems += UNCHECKED
     room = p["pod_depth"] - (info["z_pcb"] + TFT["pcb_t"] + TFT["smd_h"])
     notes.append("room behind the display's rear components for solder joints and wires: %.1f mm" % room)
     if room < 1.5:
@@ -718,7 +724,7 @@ def main():
     from mechkit.present import manifest as M
     items, views = present_items(P, world, extras)
     for a, b, vol in M.exploded_overlaps(items):
-        problems.append("exploded view: %s and %s still overlap (%.1f mm3)" % (a, b, vol))
+        problems.append("exploded view: %s and %s %s" % (a, b, "could not be checked" if vol is None else "still overlap (%.1f mm3)" % vol))
     print("presentation manifest:", M.write(PROJECT, VERSION, "Monitor weather display", items, views, steps=present_steps(), guide=present_guide()))
     for n in notes:
         print("note:", n)

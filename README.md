@@ -22,7 +22,8 @@ honest:
 - **Checks that return data.** Overlaps and clearances between parts, requirement results, print sizes.
 - **Mechanical simulation.** STEP -> gmsh -> [CalculiX](https://www.calculix.de) static analysis with load cases
   placed by geometric selectors, two-mesh convergence, and a pass / fail judgement. Results carry a tag too:
-  *calibrated* or *assumed*. An assumed result may rank options; it never approves a design.
+  *calibrated* or *assumed*. An assumed result may rank options; it never approves a design, and neither does one
+  with solver warnings, disagreeing meshes, or geometry changed since it was run.
 - **Gates.** The agent stops for a person at: the brief and where the work lives, the concept, anything bought,
   the pre-print review, and anything that touches real hardware.
 - **A front end for the person.** MechKit Studio: 3D view, exploded view, parts table, and two printable outputs,

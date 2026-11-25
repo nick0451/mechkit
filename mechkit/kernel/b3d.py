@@ -31,6 +31,23 @@ def union(*solids):
     return out
 
 
+class GeometryCheckError(RuntimeError):
+    """A geometric check could not be computed. Callers must treat it as a failed check, never as a pass."""
+
+
+def overlap_volume(a, b):
+    """Volume shared by two solids, in mm3. Raises GeometryCheckError when it cannot be computed: an invalid solid or a
+    failed boolean is never reported as 'no overlap'."""
+    for s in (a, b):
+        if not s.is_valid:
+            raise GeometryCheckError("a solid is not valid geometry")
+    try:
+        common = a & b
+        return float(common.volume) if common is not None else 0.0
+    except Exception as e:
+        raise GeometryCheckError("the intersection failed: %s" % e) from e
+
+
 def edges_along_x_near(solid, points_yz, tol=0.05):
     """Edges parallel to X whose (y, z) position is within tol of one of the given points."""
     found = []

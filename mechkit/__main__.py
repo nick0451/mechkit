@@ -3,7 +3,7 @@
     python -m mechkit propose --name NAME [--purchased N] [--custom N] [--firmware] [--part-of PROJECT] [--one-off]
     python -m mechkit new --name NAME --where own|inside|shared --confirmed "TEXT" [--project P] [--firmware]
                           [--cloud-folder "Admin Project/NAME"] [--goal "TEXT"]
-    python -m mechkit check PROJECT_FOLDER [--reports FOLDER]
+    python -m mechkit check PROJECT_FOLDER [--reports FOLDER]       exit 0 all pass, 1 a failure, 2 something unchecked
     python -m mechkit sim PROJECT_FOLDER [--refresh] [--no-pictures]     run sim/loadcases.json -> sim/reports/sim_report.json
     python -m mechkit present PROJECT_FOLDER [--version V] [--no-fusion] [--no-save]
                           labelled picture sheets + the Fusion presentation document, from the build's manifest
@@ -119,7 +119,10 @@ def main():
     elif args.cmd == "check":
         results, reports = requirements.check_project(args.folder, args.reports)
         requirements.print_results(results, reports)
-        sys.exit(1 if any(r["status"] == "fail" for r in results) else 0)
+        code = requirements.exit_code(results)
+        if code == 2:
+            print("NOT APPROVED: some requirements are not evaluated or still waiting for a person (exit 2)")
+        sys.exit(code)
 
 
 if __name__ == "__main__":
