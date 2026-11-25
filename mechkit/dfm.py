@@ -1,6 +1,6 @@
 """Manufacturability and geometry checks, done by text-to-cad's `cad` library.
 
-    text-to-cad, MIT licence, Copyright (c) earthtojake: https://github.com/earthtojake/text-to-cad
+    text-to-cad, MIT licence, Copyright (c) 2026 Thompson Labs LLC: https://github.com/earthtojake/text-to-cad
     MechKit uses it as an installed dependency (pinned in pyproject.toml); none of its code is copied here.
 
 What MechKit calls, and what it turns each result into (one plain dict per part, for reports and requirements):

@@ -58,13 +58,9 @@ collides as its convex hull). `write_report` saves `stability.json`, which requi
 Checked against hand formulas to 3 %. `sweep(assembly, joint, values)` poses a build123d assembly (build123d joints,
 labelled parts) through a joint's travel and lists overlaps; `first_collision(rows)` gives where it first hits.
 
-## Electronics (`mechkit/electronics.py`, KiCad's own kicad-cli)
+## Electronics
 
-`check(board=, schematic=)` runs DRC / ERC with the installed KiCad (`MECHKIT_KICAD_CLI` to choose one), headless and
-without touching the person's KiCad settings; `write_report` saves `electronics_report.json` for requirement
-`electronics_ok`. `board_interface(board)` gives outline size, thickness and holes in the `interface.json` layout
-(KiCad's frame: y down), so an enclosure is designed around the real board; `export(board, "step" | "gerbers" | ...)`
-writes KiCad's outputs. Boards are not edited or routed from MechKit.
+Board checks, edits and the fabrication package have their own page: [electronics.md](electronics.md).
 
 ## Slicing (`mechkit/slicer.py`, Bambu Studio or OrcaSlicer)
 
@@ -75,6 +71,5 @@ requirements `print_time_max_h`, `filament_max_g` and `parts_fit_bed` read. Pres
 
 ## Not adopted
 
-URDF / SRDF robot descriptions, Blender renders, board editing and routing (they need the library's own KiCad build),
-and the library's persistent build engine (it belongs to its server, which MechKit does not run; MechKit builds are
+URDF / SRDF robot descriptions, Blender renders, and the library's persistent build engine (it belongs to its server, which MechKit does not run; MechKit builds are
 plain scripts that take seconds).

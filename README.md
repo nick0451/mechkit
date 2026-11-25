@@ -32,8 +32,10 @@ honest:
   an exploded sheet and a step-by-step assembly guide with wiring, tools and commissioning pages.
 - **Motion and standard parts.** Will it tip or slide when used (MuJoCo), does a mechanism collide through its
   travel, and screws and heat-set inserts with their standard dimensions (bd_warehouse).
-- **Electronics and slicing, with what is installed.** KiCad's rule checks and a board's outline and holes as design
-  input; print time and filament from Bambu Studio or OrcaSlicer.
+- **Board design.** KiCad schematics and boards as part of the build: rule checks, edits and routing through KiCad's
+  API, the board's outline and holes as input to the enclosure, and the package a manufacturer takes (gerbers, drill,
+  placement, BOM) with a manifest tying it to the exact board revision. Rule-check errors block the package.
+- **Slicing, with what is installed.** Print time and filament from Bambu Studio or OrcaSlicer.
 - **Engineering drawings.** A dimensioned PDF sheet per part; every number is measured from the solid.
 - **Firmware alongside.** One `pinmap.json` per project feeds both the firmware header and the guide's wiring page.
 
@@ -62,7 +64,8 @@ that were printed, assembled and mounted, over nine revisions driven by one-line
 | Presentation manifest, labelled picture sheets | Manufacturability rules are general published guidance, not tuned to a printer or shop | A process-neutral part description |
 | MechKit Studio: viewer, exploded sheet, assembly guide | Laser / sheet: cut-file checks and flat patterns work; no worked example yet | |
 | Printing and geometry checks, engineering drawings | CNC and moulding checks are wrapped and tested on simple shapes only | |
-| Tipping / sliding simulation, mechanism travel collisions | KiCad: rule checks, board interface and exports; boards are not edited or routed | |
+| Tipping / sliding simulation, mechanism travel collisions | Board design: the tooling is tested on a small board; no board has been ordered through it yet | |
+| KiCad checks, edits, fabrication package | | |
 | Standard screws and inserts; slicer time and filament estimates | | |
 
 Today the only fabrication process is filament 3D printing. Multi-material, multi-process builds are the direction,
@@ -91,9 +94,13 @@ uv run python examples/monitor-weather-display/parts/custom/build.py
 
 ### Optional programs
 
-KiCad (rule checks, board data) and Bambu Studio or OrcaSlicer (print estimates) are used when installed; MechKit finds
+KiCad (rule checks, exports) and Bambu Studio or OrcaSlicer (print estimates) are used when installed; MechKit finds
 them in their usual folders, or through `MECHKIT_KICAD_CLI` and `MECHKIT_SLICER`. Without them those results are
 "not evaluated".
+
+Editing and routing boards needs a KiCad nightly, installed as an extra: `uv sync --extra kicad` (kicode, an
+unofficial packaging of KiCad, GPL-3.0-or-later, about 73 MB; not part of MechKit and not installed by default).
+Files it saves are in the nightly's format; MechKit keeps a copy beside them that a stable KiCad opens.
 
 ### Simulation (optional)
 
@@ -117,6 +124,7 @@ uv run python tests/test_present.py       # manifest, layout, sheets
 uv run python tests/test_studio.py        # Studio backend
 uv run python tests/test_fab.py           # manufacturability checks, flat patterns, drawings
 uv run python tests/test_integrations.py  # hardware, motion, KiCad and slicer (skipped parts say so)
+uv run python tests/test_pcb.py           # board edits and the fabrication package (needs the kicad extra)
 cd studio/web && npm test                 # web app logic
 ```
 
@@ -151,8 +159,9 @@ calibration/        test-bar definitions for measuring a printed material
 ## Built on
 
 build123d and OpenCascade (geometry), [text-to-cad](https://github.com/earthtojake/text-to-cad)'s `cad` library
-(manufacturability checks, flat patterns, drawings; MIT, used as a dependency, its `cad` command and telemetry are not
-run), MuJoCo (rigid-body simulation, Apache-2.0), bd_warehouse (standard parts, Apache-2.0), gmsh (meshing, GPL, installed as
+(manufacturability checks, flat patterns, drawings, KiCad and slicer glue; MIT, Copyright Thompson Labs LLC, used as a
+dependency, its `cad` command and telemetry are not run; its board-design references are included under
+`skills/mechkit/references/pcb/` with their licence), KiCad (GPL, run as a separate program), MuJoCo (rigid-body simulation, Apache-2.0), bd_warehouse (standard parts, Apache-2.0), gmsh (meshing, GPL, installed as
 a dependency, not bundled), CalculiX (solver, GPL, not distributed here),
 PyVista (pictures), FastAPI and uvicorn (Studio backend), React and three.js (Studio front end). Each keeps its own
 licence.

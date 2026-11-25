@@ -1,4 +1,4 @@
-"""Engineering drawings of parts, drawn by text-to-cad's `cad.eng_drawing` (MIT, Copyright (c) earthtojake,
+"""Engineering drawings of parts, drawn by text-to-cad's `cad.eng_drawing` (MIT, Copyright (c) 2026 Thompson Labs LLC,
 https://github.com/earthtojake/text-to-cad; used as an installed dependency, no code copied).
 
     part_sheet(shape, title, ...)    one A3/A4 sheet: top, front, right and iso views, overall sizes, hole callouts

@@ -9,6 +9,13 @@
                           labelled picture sheets + the Fusion presentation document, from the build's manifest
     python -m mechkit studio [--port 8765] [--no-browser] [--projects DIR ...]
                           the local web viewer: exploded view, parts table, printable exploded sheet and assembly guide
+    python -m mechkit pcb check BOARD [--schematic S] [--out DIR]    KiCad DRC / ERC (exit 0 pass, 1 fail, 2 not evaluated)
+    python -m mechkit pcb fab BOARD --out DIR [--go-ahead "TEXT"]    the package a board manufacturer takes
+    python -m mechkit pcb inspect | interface BOARD                  what the board holds / its outline and holes
+    python -m mechkit pcb export BOARD KIND DIR                      one KiCad output (gerbers, drill, pos, bom, step, dxf, pdf)
+    python -m mechkit pcb render BOARD OUT.png [--side top]          a picture by KiCad's renderer
+    python -m mechkit pcb stable BOARD                               a copy a stable KiCad app opens
+    python -m mechkit pcb kicad-cli -- ARGS                          KiCad's own command line, with private settings
     python -m mechkit.sim.benchmark
 """
 
@@ -55,6 +62,13 @@ def main():
     f.add_argument("--no-browser", action="store_true", help="do not open the browser")
     f.add_argument("--projects", action="append", metavar="DIR",
                    help="a folder whose sub-folders are projects (repeatable). Default: $MECHKIT_PROJECTS, else beside the kit and its examples/")
+    g = sub.add_parser("pcb", help="KiCad boards: check, fabrication package, inspect, export, render, stable copy")
+    g.add_argument("action", choices=["check", "fab", "inspect", "interface", "export", "render", "stable", "kicad-cli"])
+    g.add_argument("rest", nargs="*")
+    g.add_argument("--schematic")
+    g.add_argument("--out")
+    g.add_argument("--go-ahead", default="", help="the person's own words and date, to write files despite rule-check errors")
+    g.add_argument("--side", default="top")
     args = p.parse_args()
 
     if args.cmd == "propose":
@@ -116,6 +130,8 @@ def main():
     elif args.cmd == "studio":
         from . import studio
         sys.exit(studio.serve(port=args.port, open_browser=not args.no_browser, projects_root=args.projects))
+    elif args.cmd == "pcb":
+        sys.exit(_pcb(args))
     elif args.cmd == "check":
         results, reports = requirements.check_project(args.folder, args.reports)
         requirements.print_results(results, reports)
@@ -123,6 +139,65 @@ def main():
         if code == 2:
             print("NOT APPROVED: some requirements are not evaluated or still waiting for a person (exit 2)")
         sys.exit(code)
+
+
+def _pcb(args):
+    from pathlib import Path
+
+    from . import electronics
+    rest = args.rest
+    if args.action == "kicad-cli":
+        r = electronics.run_kicad_cli(rest)
+        sys.stdout.write(r.stdout)
+        sys.stderr.write(r.stderr)
+        return r.returncode
+    if not rest:
+        sys.exit("pcb %s needs a board file" % args.action)
+    board = Path(rest[0])
+    try:
+        if args.action == "check":
+            sch = args.schematic or (board.with_suffix(".kicad_sch") if board.with_suffix(".kicad_sch").is_file() else None)
+            report = electronics.check(board=board, schematic=sch)
+            for k in ("drc", "erc"):
+                if k in report:
+                    e = report[k]
+                    print("%s %s: %d errors, %d warnings%s" % (k.upper(), e["status"], e["errors"], e["warnings"], " (%s)" % e["reason"] if e.get("reason") else ""))
+                    for i in e["issues"]:
+                        print("   %-7s %s at %s: %s" % (i["severity"], i["code"], i["location"], (i["message"] or "")[:160]))
+            if args.out:
+                print("written:", electronics.write_report(args.out, report))
+            return {"pass": 0, "fail": 1}.get(report["status"], 2)
+        if args.action == "fab":
+            if not args.out:
+                sys.exit("pcb fab needs --out DIR")
+            m = electronics.fab_package(board, args.out, schematic=args.schematic, go_ahead=args.go_ahead)
+            print("fabrication package in %s: %d files from %s (sha256 %s...)" % (args.out, len(m["files"]), m["board"]["file"], m["board"]["sha256"][:12]))
+            for n in m["notes"]:
+                print("  note:", n)
+            if m["go_ahead"]:
+                print("  WRITTEN DESPITE %s: %s" % (", ".join(k.upper() for k in m["blocked_by"]), m["go_ahead"]))
+            print("Nothing was sent. Open the gerbers in a viewer before ordering; ordering is the person's decision.")
+        elif args.action == "inspect":
+            cad, _ = electronics._cad()
+            print(json.dumps(cad.kicad_pcb.inspect(board), indent=1, default=str))
+        elif args.action == "interface":
+            print(json.dumps(electronics.board_interface(board), indent=1))
+        elif args.action == "export":
+            if len(rest) != 3:
+                sys.exit("pcb export BOARD KIND DIR")
+            for f in electronics.export(board, rest[1], rest[2]):
+                print("written:", f)
+        elif args.action == "render":
+            if len(rest) != 2:
+                sys.exit("pcb render BOARD OUT.png")
+            print("written:", electronics.render(board, rest[1], side=args.side))
+        elif args.action == "stable":
+            print("written:", electronics.stable_copy(board, out=args.out))
+    except PermissionError as e:
+        sys.exit("NOT WRITTEN: %s" % e)
+    except (RuntimeError, FileNotFoundError, ValueError) as e:
+        sys.exit("FAILED: %s" % e)
+    return 0
 
 
 if __name__ == "__main__":

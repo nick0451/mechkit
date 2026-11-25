@@ -167,8 +167,9 @@ def main():
             check("two 3.2 mm holes at (4, 4) and (26, 16)", sorted((h["x"], h["y"], h["diameter"]) for h in face["holes"]) == [(4.0, 4.0, 3.2), (26.0, 16.0, 3.2)], face["holes"])
             written = electronics.export(good, "step", tmp / "board_step")
             check("the board exports as STEP", written and written[0].suffix.lower() in (".step", ".stp") and written[0].stat().st_size > 1000, written)
-            env_set = os.environ.get("CAD_KICAD_CLI") == str(cli)
-            check("the library was pointed at the installed KiCad", env_set, os.environ.get("CAD_KICAD_CLI"))
+            own = electronics._kicode_cli()
+            check("the library was pointed at the KiCad chosen (its own nightly when the kicad extra is installed)",
+                  os.environ.get("CAD_KICAD_CLI") == (None if cli == own else str(cli)), os.environ.get("CAD_KICAD_CLI"))
         for k, v in old.items():
             if v is None:
                 os.environ.pop(k, None)
