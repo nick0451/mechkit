@@ -11,6 +11,9 @@ What MechKit calls, and what it turns each result into (one plain dict per part,
                                 holes, slots and webs against the kerf and the thickness
     flat_pattern(shape, ...)    cad.build123d.unfold: a bent sheet part's exact flat pattern, written as DXF
     geometry(parts)             is_sound, topology_errors, self_intersections: is each solid usable geometry
+    cnc(parts, ...) / molding(parts, ...)   cad.build123d.cnc / molding: tool reach, internal corners, draft, walls
+    clearance(a, b)             cad.build123d.closest_points: the smallest gap between two solids
+    mass(parts)                 cad.build123d.mass_properties: mass and centre of mass from densities
 
 Rules: text-to-cad's GENERAL rules (each finding names its source, e.g. Protolabs Network design guides). They are not
 the user's printer's or a shop's limits: every report says so in "rules", and a result never stands in for a test print.
@@ -89,6 +92,46 @@ def sheet_metal(parts, material=None, thickness=None, k_factor=None, bend_radius
     return _report("sheet", {n: _guarded(lambda s=s: cb.sheet_metal(s, **settings)) for n, s in parts.items()}, settings)
 
 
+def cnc(parts, **options):
+    """{name: solid} -> CNC machining report. options: material, axes (3 / 4 / 5), turning, tools (cutter diameters mm), stock."""
+    _, cb = _cad()
+    return _report("cnc", {n: _guarded(lambda s=s: cb.cnc(s, **options)) for n, s in parts.items()}, options)
+
+
+def molding(parts, **options):
+    """{name: solid} -> injection moulding report. options: material, pull (direction), wall_limit, cavities."""
+    _, cb = _cad()
+    return _report("molding", {n: _guarded(lambda s=s: cb.molding(s, **options)) for n, s in parts.items()}, options)
+
+
+def clearance(a, b):
+    """Smallest gap between two solids in mm (0 when they touch or overlap), with the two closest points.
+    Raises GeometryCheckError when it cannot be measured: an unmeasured gap is never reported as clear."""
+    _, cb = _cad()
+    from .kernel.b3d import GeometryCheckError
+    try:
+        c = cb.closest_points(a, b)
+        return {"gap_mm": round(float(c.distance), 4), "at_a": [round(v, 4) for v in (c.point_a.X, c.point_a.Y, c.point_a.Z)],
+                "at_b": [round(v, 4) for v in (c.point_b.X, c.point_b.Y, c.point_b.Z)]}
+    except Exception as e:
+        raise GeometryCheckError("the gap could not be measured: %s" % e) from e
+
+
+def mass(parts):
+    """{name: (solid, density in g/cm3)} -> {"mass_g", "centre_mm", "parts": {name: g}}: SOLID material, so a printed
+    part with infill weighs less; weigh the real part and record that as measured."""
+    _, cb = _cad()
+    bodies, each = [], {}
+    for n, (shape, density) in parts.items():
+        solids = list(shape.solids())
+        each[n] = round(sum(s.volume for s in solids) * density / 1000.0, 3)
+        bodies += [(s, density * 1e-6) for s in solids]             # g/cm3 -> kg/mm3
+    m = cb.mass_properties(bodies)
+    com = m.center_of_mass if hasattr(m, "center_of_mass") else m.centre_of_mass
+    return {"mass_g": round(float(m.mass) * 1000.0, 3), "centre_mm": [round(float(v), 4) for v in (com.X, com.Y, com.Z)] if hasattr(com, "X") else [round(float(v), 4) for v in com],
+            "parts": each}
+
+
 def laser_dxf(paths, material=None, thickness=None, kerf=None, units="mm", sheet_size=None):
     """{name: DXF path} (or one path) -> cut-file report for laser / waterjet / router cutting."""
     cad, _ = _cad()
@@ -155,7 +198,7 @@ def problems(report):
     for n, g in (report.get("geometry") or {}).items():
         if g["status"] != "pass":
             out.append("geometry %s: %s" % (n, g.get("reason") or "not sound (%s)" % "; ".join((g.get("topology_errors") or []) + (g.get("self_intersections") or []))[:200]))
-    for key in ("printing", "sheet", "laser"):
+    for key in ("printing", "sheet", "laser", "cnc", "molding"):
         r = report.get(key)
         if not r:
             continue

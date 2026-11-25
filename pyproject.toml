@@ -4,11 +4,13 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "bd-materials>=0.2.5,<0.3",
+    "bd-warehouse>=0.4,<0.5",
     "build123d>=0.13.0",
     "cad==0.11.17",
     "fastapi>=0.165.0",
     "gmsh>=4.15.2",
     "meshio>=5.3.5",
+    "mujoco-core>=4.0,<5",
     "networkx>=3.6.1,<4",
     "numpy>=2.5.5",
     "pyvista>=0.49.2",

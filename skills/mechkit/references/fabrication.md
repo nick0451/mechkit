@@ -38,8 +38,43 @@ overall sizes, and hole callouts for full round holes found in the solid (throug
 Every number is measured from the solid: never type a dimension onto a sheet. The sheet states that no tolerances
 are given; tolerances for a printed part come from a fit test, not from the drawing.
 
-## Not adopted (yet)
+## More checks in `mechkit/dfm.py`
 
-Slicing (OrcaSlicer), MuJoCo / URDF / SRDF robot descriptions, KiCad boards, CNC and moulding checks, Blender
-renders, and the library's persistent build engine. Each is available in the same library and can be wrapped the same
-way when a project needs it.
+`cnc({name: solid}, material=, axes=, tools=)` and `molding({name: solid}, material=, pull=)` report like `printing`.
+`clearance(a, b)` gives the smallest gap between two solids and where; `mass({name: (solid, g/cm3)})` gives mass and
+centre of mass of SOLID material (a printed part weighs less: weigh it and record that as measured).
+
+## Standard hardware (`mechkit/hardware.py`, bd_warehouse, Apache-2.0)
+
+`screw("M3-0.5", 10)` (ISO 4762; also `pan_head`, `countersunk`, `button_head`) and `insert("M3-0.5", maker="CNCKitchen")`
+return `(solid, facts)`: dimensions tagged stated with their source, clearance and tap hole sizes, an insert's hole
+size and the maker's product reference. Bearings are not offered (they do not build with this kernel version).
+
+## Motion (`mechkit/motion.py`, MuJoCo, Apache-2.0)
+
+`stability({name: (solid, grams)}, [{"action", "at", "direction", "force_n"}], friction=0.5)` stands the thing on a
+floor and finds, per push, the force at which it tips or slides (bisection over rigid-body simulations; each part
+collides as its convex hull). `write_report` saves `stability.json`, which requirement `stability_min_ratio` reads.
+Checked against hand formulas to 3 %. `sweep(assembly, joint, values)` poses a build123d assembly (build123d joints,
+labelled parts) through a joint's travel and lists overlaps; `first_collision(rows)` gives where it first hits.
+
+## Electronics (`mechkit/electronics.py`, KiCad's own kicad-cli)
+
+`check(board=, schematic=)` runs DRC / ERC with the installed KiCad (`MECHKIT_KICAD_CLI` to choose one), headless and
+without touching the person's KiCad settings; `write_report` saves `electronics_report.json` for requirement
+`electronics_ok`. `board_interface(board)` gives outline size, thickness and holes in the `interface.json` layout
+(KiCad's frame: y down), so an enclosure is designed around the real board; `export(board, "step" | "gerbers" | ...)`
+writes KiCad's outputs. Boards are not edited or routed from MechKit.
+
+## Slicing (`mechkit/slicer.py`, Bambu Studio or OrcaSlicer)
+
+`estimates(project, version, printer, process, filament)` slices every STL of the export with the installed slicer
+(`MECHKIT_SLICER` to choose one) and writes `print_estimates.json` (time, grams, layers, the settings used), which
+requirements `print_time_max_h`, `filament_max_g` and `parts_fit_bed` read. Preset names are the slicer's own, e.g.
+"Bambu Lab A1 0.4 nozzle", "0.20mm Standard @BBL A1", "Bambu PETG Basic @BBL A1". It never sends a print.
+
+## Not adopted
+
+URDF / SRDF robot descriptions, Blender renders, board editing and routing (they need the library's own KiCad build),
+and the library's persistent build engine (it belongs to its server, which MechKit does not run; MechKit builds are
+plain scripts that take seconds).

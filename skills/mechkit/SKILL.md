@@ -50,6 +50,10 @@ mechkit/kernel/b3d.py         headless geometry helpers (build123d): prisms, hol
 mechkit/dfm.py                manufacturability + geometry checks via text-to-cad's `cad` library (see references/fabrication.md)
 mechkit/drawing.py            engineering drawings (PDF), every number measured from the solid
 mechkit/revisions.py          which export revision is newest (by name)
+mechkit/hardware.py           standard screws and heat-set inserts as solids + tagged dimensions (bd_warehouse)
+mechkit/motion.py             tipping / sliding under a push (MuJoCo) -> stability.json; mechanism travel collisions
+mechkit/electronics.py        KiCad: DRC / ERC -> electronics_report.json, a board's outline and holes as an interface, exports
+mechkit/slicer.py             slices the print files with the installed Bambu Studio / OrcaSlicer -> print_estimates.json
 mechkit/sim/mesh.py           gmsh -> 10-node tetrahedra (CalculiX C3D10) + surface triangles
 mechkit/sim/ccx.py            input deck writer, solver runner with the repeat guard, result reader (mm, N, MPa)
 mechkit/sim/loadcase.py       sim/loadcases.json: face selectors, cases, judgement, sim_report.json
@@ -69,7 +73,7 @@ examples/monitor-weather-display/   a complete worked example: build script, bou
 tests/                        plain scripts: `uv run python tests/test_<name>.py` (last line "N checks, M failed")
 ```
 Commands: `python -m mechkit propose | new | check <project> | sim <project> | present <project> --no-fusion | studio`,
-`uv run python tests/test_fab.py` (adopted fabrication checks),
+`uv run python tests/test_fab.py` and `tests/test_integrations.py` (adopted capabilities),
 `python -m mechkit.sim.benchmark`, `python -m mechkit.calibration make | fit`.
 
 ## Rules
@@ -109,3 +113,11 @@ Commands: `python -m mechkit propose | new | check <project> | sim <project> | p
     problem to fix or put to the person at G3; warnings go in the pre-print review. A check that could not run is
     "not evaluated", never clear. Requirements can use `dfm_ok` and `geometry_sound`.
 14. Drawings (`mechkit/drawing.py`) show only numbers measured from the model; never type a dimension onto a sheet.
+15. Screws and inserts come from `mechkit/hardware.py`, not hand-made cylinders: its numbers are tagged stated with the
+    standard or maker as source. An insert's hole is `facts["hole_d"]` (the maker's), never the thread's tap drill.
+16. `mechkit/motion.py`: masses and friction are assumed until weighed / measured, and the report says so. Push forces
+    (`force_n`) are the person's numbers or tagged assumed. A thing that moves with no push is a problem, not a result.
+17. `mechkit/electronics.py` uses the KiCad installed on the machine, headless; it never edits a board. Ordering boards
+    is G2. `mechkit/slicer.py` estimates only: it never sends a print (G4 is the person's).
+18. Programs on the machine are found, never installed silently: `MECHKIT_CCX`, `MECHKIT_KICAD_CLI`, `MECHKIT_SLICER`.
+    When one is missing the result is "not evaluated" and the build says which.

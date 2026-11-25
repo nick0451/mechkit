@@ -1,0 +1,167 @@
+{
+ "version": "v0p9",
+ "printer": "Bambu Lab A1 0.4 nozzle",
+ "process": "0.20mm Standard @BBL A1",
+ "filament": "Bambu PETG Basic @BBL A1",
+ "bed_type": "Textured PEI Plate",
+ "files": [
+  {
+   "file": "Bezel.stl",
+   "size": [
+    48.0,
+    47.99,
+    4.4
+   ],
+   "seconds": 451,
+   "g": 2.31,
+   "layers": 22,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Board_Cap.stl",
+   "size": [
+    32.6,
+    25.9,
+    14.0
+   ],
+   "seconds": 757,
+   "g": 2.57,
+   "layers": 70,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Clamp.stl",
+   "size": [
+    56.47,
+    37.7,
+    65.5
+   ],
+   "seconds": 4451,
+   "g": 14.82,
+   "layers": 327,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Cover.stl",
+   "size": [
+    48.0,
+    53.99,
+    5.4
+   ],
+   "seconds": 672,
+   "g": 4.84,
+   "layers": 27,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Jaw.stl",
+   "size": [
+    44.0,
+    18.0,
+    3.0
+   ],
+   "seconds": 313,
+   "g": 2.04,
+   "layers": 15,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Knob.stl",
+   "size": [
+    17.77,
+    17.77,
+    9.0
+   ],
+   "seconds": 639,
+   "g": 1.4,
+   "layers": 45,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  },
+  {
+   "file": "Pod.stl",
+   "size": [
+    48.0,
+    53.99,
+    8.0
+   ],
+   "seconds": 1002,
+   "g": 6.19,
+   "layers": 40,
+   "warning": "",
+   "settings": {
+    "printer_model": "Bambu Lab A1",
+    "filament_type": "PETG",
+    "layer_height": "0.2",
+    "wall_loops": "2",
+    "sparse_infill_density": "15%",
+    "enable_support": "0",
+    "nozzle_temperature": "245",
+    "slicer": "BambuStudio 02.09.01.70"
+   }
+  }
+ ],
+ "problems": [],
+ "total_seconds": 8285,
+ "total_g": 34.17,
+ "slicer": "bambu-studio.exe"
+}

@@ -742,6 +742,13 @@ def main():
         print("written:", drawing.write(sheets, out / "drawings.pdf"))
     except Exception as e:
         problems.append("drawings not written: %s: %s" % (type(e).__name__, e))
+    from mechkit import slicer                      # time and filament from the installed slicer, standard 0.20 mm A1 PETG profile
+    if slicer.find_slicer():
+        est = slicer.estimates(PROJECT, VERSION, "Bambu Lab A1 0.4 nozzle", "0.20mm Standard @BBL A1", "Bambu PETG Basic @BBL A1")
+        print("print estimate (%s): %.1f h, %.0f g for %d files" % (est.get("slicer"), est["total_seconds"] / 3600, est["total_g"], len(est["files"])))
+        problems += ["slicing: %s" % p for p in est["problems"]]
+    else:
+        notes.append("no slicer found (MECHKIT_SLICER): print_estimates.json was not refreshed")
     (PROJECT / "logs").mkdir(exist_ok=True)
     (PROJECT / "logs" / ("build_%s.json" % VERSION)).write_text(json.dumps(report, indent=1), encoding="utf-8")
     from mechkit.present import manifest as M

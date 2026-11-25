@@ -21,6 +21,7 @@ revisions (v0.1 to v0.9). This folder is a snapshot of v0.9, the version that wa
 | `sim/` | load cases generated from the design parameters, the simulation report and stress pictures |
 | `exports/v0p9/` | print files (STL, already oriented for the bed), STEP files, and the presentation manifest |
 | `exports/v0p9/dfm_report.json`, `drawings.pdf` | manufacturability and geometry checks of each part as printed, and a drawing per part |
+| `exports/v0p9/print_estimates.json` | time and filament per part from the slicer (written when Bambu Studio or OrcaSlicer is installed) |
 | `renders/` | pictures of v0.9 and the labelled sheets |
 | `tests/check_sky_maths.py` | known-answer checks of the sun-position and season maths |
 
@@ -43,7 +44,8 @@ uv run python -m mechkit sim examples/monitor-weather-display
 - The strength results use an ASSUMED material card for printed PETG (no calibration prints were measured), so they
   rank options but do not prove the clamp.
 - The pin choice in `pinmap.json` carries its own status line, which is printed on the wiring page.
-- Layer height and infill used for the prints were not recorded.
+- Layer height and infill used for the prints were not recorded. The slicer estimate (2.3 h, 34 g) uses the standard
+  0.20 mm profile for the A1 with PETG, so it is an estimate for that profile, not a record of the real prints.
 - The printing check (general FDM rules) first failed the Pod on three slivers 0.01 to 0.05 mm thick, left where two
   cuts nearly met. Far below one extrusion line, so the printed Pod was fine; the cuts were cleaned up after printing
   (geometry moved by 0.04 mm at most) and all seven parts now pass.

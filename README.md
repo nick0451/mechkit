@@ -30,6 +30,10 @@ honest:
   the pre-print review, and anything that touches real hardware.
 - **A front end for the person.** MechKit Studio: 3D view, exploded view, parts table, and two printable outputs,
   an exploded sheet and a step-by-step assembly guide with wiring, tools and commissioning pages.
+- **Motion and standard parts.** Will it tip or slide when used (MuJoCo), does a mechanism collide through its
+  travel, and screws and heat-set inserts with their standard dimensions (bd_warehouse).
+- **Electronics and slicing, with what is installed.** KiCad's rule checks and a board's outline and holes as design
+  input; print time and filament from Bambu Studio or OrcaSlicer.
 - **Engineering drawings.** A dimensioned PDF sheet per part; every number is measured from the solid.
 - **Firmware alongside.** One `pinmap.json` per project feeds both the firmware header and the guide's wiring page.
 
@@ -52,12 +56,14 @@ that were printed, assembled and mounted, over nine revisions driven by one-line
 | Works today | Partly | Planned, not built |
 |---|---|---|
 | Project spin-up with the folder gate | Material data: the printed-PETG card is **assumed**; the calibration tooling exists but no measured prints back it yet | Tolerance stack-ups from measured printer behaviour |
-| Requirement checks | Printed pages were checked on screen, not yet on paper | Motion simulation (tipping, mechanisms) |
+| Requirement checks | Printed pages were checked on screen, not yet on paper | Driven mechanisms and robot descriptions (URDF / MJCF export) |
 | Headless CAD helpers (build123d) | Autodesk Fusion bridge: experimental, needs a separate add-in that is not part of this repository | Parameter optimisation |
 | Structural simulation with a known-answer benchmark | Developed and tested on Windows 11 only | A worked laser-cut build, and with it builds in more than one material and process |
 | Presentation manifest, labelled picture sheets | Manufacturability rules are general published guidance, not tuned to a printer or shop | A process-neutral part description |
 | MechKit Studio: viewer, exploded sheet, assembly guide | Laser / sheet: cut-file checks and flat patterns work; no worked example yet | |
-| Printing and geometry checks, engineering drawings | | |
+| Printing and geometry checks, engineering drawings | CNC and moulding checks are wrapped and tested on simple shapes only | |
+| Tipping / sliding simulation, mechanism travel collisions | KiCad: rule checks, board interface and exports; boards are not edited or routed | |
+| Standard screws and inserts; slicer time and filament estimates | | |
 
 Today the only fabrication process is filament 3D printing. Multi-material, multi-process builds are the direction,
 not a shipped feature.
@@ -83,6 +89,12 @@ Rebuild the example from its script (parts, checks, renders, manifest):
 uv run python examples/monitor-weather-display/parts/custom/build.py
 ```
 
+### Optional programs
+
+KiCad (rule checks, board data) and Bambu Studio or OrcaSlicer (print estimates) are used when installed; MechKit finds
+them in their usual folders, or through `MECHKIT_KICAD_CLI` and `MECHKIT_SLICER`. Without them those results are
+"not evaluated".
+
 ### Simulation (optional)
 
 The solver is not included. Get a CalculiX `ccx` executable (for Windows, the official builds linked from
@@ -104,6 +116,7 @@ uv run python tests/test_phase1.py        # simulation chain (skipped without th
 uv run python tests/test_present.py       # manifest, layout, sheets
 uv run python tests/test_studio.py        # Studio backend
 uv run python tests/test_fab.py           # manufacturability checks, flat patterns, drawings
+uv run python tests/test_integrations.py  # hardware, motion, KiCad and slicer (skipped parts say so)
 cd studio/web && npm test                 # web app logic
 ```
 
@@ -139,7 +152,8 @@ calibration/        test-bar definitions for measuring a printed material
 
 build123d and OpenCascade (geometry), [text-to-cad](https://github.com/earthtojake/text-to-cad)'s `cad` library
 (manufacturability checks, flat patterns, drawings; MIT, used as a dependency, its `cad` command and telemetry are not
-run), gmsh (meshing, GPL, installed as a dependency, not bundled), CalculiX (solver, GPL, not distributed here),
+run), MuJoCo (rigid-body simulation, Apache-2.0), bd_warehouse (standard parts, Apache-2.0), gmsh (meshing, GPL, installed as
+a dependency, not bundled), CalculiX (solver, GPL, not distributed here),
 PyVista (pictures), FastAPI and uvicorn (Studio backend), React and three.js (Studio front end). Each keeps its own
 licence.
 

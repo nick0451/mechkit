@@ -10,7 +10,7 @@
     python -m mechkit check <project folder> [--reports <folder with the report files>]
 
 Each check reads one report file (the newest export folder by default): stability.json, print_estimates.json,
-sim_report.json, mount_checks.json, dfm_report.json. A missing report gives "not evaluated", never a silent pass.
+sim_report.json, mount_checks.json, dfm_report.json, electronics_report.json. A missing report gives "not evaluated", never a silent pass.
 Statuses: pass | fail | not evaluated | manual (waiting for a person).
 `python -m mechkit check` exits 0 only when every requirement passes, 1 when any fails, 2 when none fails but some are
 not evaluated or still waiting for a person: an unchecked requirement is never reported as success.
@@ -40,6 +40,8 @@ def _stability_min_ratio(check, reports, project=None):
     s = _load(reports, "stability.json")
     if s is None:
         return "not evaluated", "no stability.json"
+    if s.get("problems") or not s.get("worst"):
+        return "not evaluated", "the stability run has no result: %s" % "; ".join(s.get("problems") or ["no actions"])[:200]
     worst = s["worst"]
     ratio = worst["tips_at_n"] / worst["force_n"]
     return ("pass" if ratio >= check["min"] else "fail"), "weakest: %s tips at %.1f N = %.2fx its assumed %.1f N (need %.2fx)" % (
@@ -168,6 +170,23 @@ def _geometry_sound(check, reports, project=None):
     return "pass", "%d solids sound" % len(g)
 
 
+def _electronics_ok(check, reports, project=None):
+    """{"type": "electronics_ok", "max_warnings": N (optional)}: KiCad's DRC and ERC in electronics_report.json."""
+    r = _load(reports, "electronics_report.json")
+    runs = {k: r[k] for k in ("drc", "erc") if r and k in r}
+    if not runs:
+        return "not evaluated", "no DRC / ERC in electronics_report.json"
+    detail = ", ".join("%s %s (%d errors, %d warnings)" % (k.upper(), v["status"], v.get("errors", 0), v.get("warnings", 0)) for k, v in runs.items())
+    if any(v["status"] == "fail" for v in runs.values()):
+        return "fail", detail
+    if any(v["status"] != "pass" for v in runs.values()):
+        return "not evaluated", detail
+    warnings = sum(v.get("warnings", 0) for v in runs.values())
+    if "max_warnings" in check and warnings > check["max_warnings"]:
+        return "fail", detail + " (limit %d warnings)" % check["max_warnings"]
+    return "pass", detail
+
+
 CHECKS = {
     "stability_min_ratio": _stability_min_ratio,
     "print_time_max_h": _print_time_max_h,
@@ -177,6 +196,7 @@ CHECKS = {
     "mounts_pass": _mounts_pass,
     "dfm_ok": _dfm_ok,
     "geometry_sound": _geometry_sound,
+    "electronics_ok": _electronics_ok,
 }
 
 
