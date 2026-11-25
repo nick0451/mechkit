@@ -1,0 +1,101 @@
+{
+ "part": "gc9a01_1p28",
+ "prefix": "TFT",
+ "source": "AliExpress item 3256811965834478, seller dimension drawing (7-pin version), read 2026-11-23. The user's own module is NOT yet confirmed to be this version (some have 8 pins with a backlight pin). 2026-11-24: the user's board matches (7 pins, tab, no header); the ribbon fold was added from their test print.",
+ "datum": "display centre on the PCB FRONT face (the face the screen sits on); +Z out of the screen toward the viewer; +Y toward the pin-header tab",
+ "units": "mm",
+ "dims": {
+  "pcb_d": [
+   38.0,
+   "stated",
+   "round PCB diameter"
+  ],
+  "pcb_len": [
+   45.5,
+   "stated",
+   "overall PCB length including the header tab (tab end is 26.5 from the display centre)"
+  ],
+  "tab_w": [
+   22.92,
+   "stated",
+   "header tab width"
+  ],
+  "pcb_t": [
+   1.6,
+   "stated",
+   "PCB thickness"
+  ],
+  "tft_t": [
+   1.5,
+   "stated",
+   "screen (glass + backlight) thickness in front of the PCB, +/-0.1"
+  ],
+  "smd_h": [
+   1.2,
+   "stated",
+   "tallest component on the back of the PCB"
+  ],
+  "bl_w": [
+   35.6,
+   "stated",
+   "backlight / glass outline width, +/-0.1"
+  ],
+  "bl_h": [
+   38.1,
+   "stated",
+   "backlight / glass outline height (longer toward the tab), +/-0.1"
+  ],
+  "active_d": [
+   32.4,
+   "stated",
+   "visible picture diameter"
+  ],
+  "hole_pitch": [
+   19.26,
+   "stated",
+   "two mounting holes on the tab, centre to centre"
+  ],
+  "hole_d": [
+   2.0,
+   "stated",
+   "mounting hole diameter"
+  ],
+  "hole_from_tab_end": [
+   5.83,
+   "scaled",
+   "mounting hole centres above the tab end (dimension line read from the drawing)"
+  ],
+  "pin_pitch": [
+   2.54,
+   "stated",
+   "7 pins: RST CS DC SDA SCL GND VCC"
+  ],
+  "pin_row_from_tab_end": [
+   1.76,
+   "stated",
+   "pin row above the tab end"
+  ],
+  "header_behind_pcb": [
+   8.3,
+   "scaled",
+   "straight pin header standing behind the PCB if fitted (11.3 overall - PCB - screen); unknown whether the user's is soldered on"
+  ],
+  "fpc_w": [
+   14.0,
+   "measured",
+   "flex ribbon width at the tab side of the screen, centred (user, first test print, 'around 14')"
+  ],
+  "fpc_past_screen": [
+   2.0,
+   "measured",
+   "the ribbon's fold reaches this far past the screen outline toward the pins, as thick as the screen (user, 'about 2')"
+  ],
+  "solder_leg_front": [
+   1.5,
+   "assumed",
+   "how far the soldered wire ends / solder stand proud of the board's FRONT face at the 7 pads (user 2026-11-24: they tilt the display; height not measured)"
+  ]
+ },
+ "mounts": [],
+ "note": "Held in the pod by a pocket in front and the cover's tongue behind: the two 2 mm holes are not used (no M2 screws on hand)."
+}

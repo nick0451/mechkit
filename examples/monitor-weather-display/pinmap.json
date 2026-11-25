@@ -1,0 +1,57 @@
+{
+ "about": "The ONLY place pin assignments are written. The firmware header and the wiring table are generated from this file.",
+ "status": "proposed 2026-11-24, not yet wired or tested",
+ "board": {
+  "name": "ESP32-C3 SuperMini",
+  "platformio_board": "esp32-c3-devkitm-1",
+  "avoid": "GPIO2, GPIO8 and GPIO9 are boot-strapping pins (GPIO8 is also the on-board LED); GPIO18/19 are USB"
+ },
+ "pins": [
+  {
+   "signal": "TFT_SCLK",
+   "gpio": 4,
+   "direction": "out",
+   "connects_to": "display pad SCL",
+   "notes": "SPI clock"
+  },
+  {
+   "signal": "TFT_MOSI",
+   "gpio": 6,
+   "direction": "out",
+   "connects_to": "display pad SDA",
+   "notes": "SPI data"
+  },
+  {
+   "signal": "TFT_CS",
+   "gpio": 7,
+   "direction": "out",
+   "connects_to": "display pad CS",
+   "notes": ""
+  },
+  {
+   "signal": "TFT_DC",
+   "gpio": 10,
+   "direction": "out",
+   "connects_to": "display pad DC",
+   "notes": ""
+  },
+  {
+   "signal": "TFT_RST",
+   "gpio": 3,
+   "direction": "out",
+   "connects_to": "display pad RST",
+   "notes": ""
+  }
+ ],
+ "power": [
+  {
+   "from": "board 3V3",
+   "to": "display pad VCC"
+  },
+  {
+   "from": "board GND",
+   "to": "display pad GND"
+  }
+ ],
+ "wires": "7 wires, about 80 mm each: from the display's tab, through the slot in the cover and hanger, under the saddle, up the back wall to the board"
+}

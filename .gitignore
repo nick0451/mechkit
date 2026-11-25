@@ -1,0 +1,33 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+studio/web/dist/
+/work/
+examples/*/work/
+.pio/
+
+# the CalculiX solver is downloaded separately (GPL; see README)
+/tools/
+
+# built on demand by Studio, beside each manifest
+model.glb
+model.glb.json
+model.*.tmp.glb
+
+# local working notes of whoever runs the kit (not part of the tool)
+/state.md
+examples/*/state.md
+CLAUDE.local.md
+*.local.md
+
+# private parts that are not published with the kit
+mechkit/kernel/desk_brace.py
+tests/test_phase4_trial.py
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

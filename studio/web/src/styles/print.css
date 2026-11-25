@@ -1,0 +1,9 @@
+/* FOUNDATION FILE (main session): the print switch. The Print agent adds its own page styles in src/print/*.css.
+   On screen #print-root is hidden. When printing, the app is hidden and only #print-root is laid out. */
+#print-root { display: none; }
+
+@media print {
+  #root { display: none !important; }
+  #print-root { display: block; }
+  html, body { height: auto; background: #fff; color: #111; }
+}

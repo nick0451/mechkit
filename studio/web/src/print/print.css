@@ -1,0 +1,320 @@
+/* Page styles for the two printed outputs (Print agent). Everything is scoped under #print-root, which
+   styles/print.css hides on screen and shows alone when printing.
+
+   Designed for LANDSCAPE A4 / US Letter with 10 mm margins: the smaller of the two content boxes is 259 mm wide
+   (Letter) and 190 mm tall (A4). Picture and text sit side by side there. In PORTRAIT (190 mm wide) the two
+   columns no longer fit beside each other and wrap: picture above, text or table below, still on one page.
+   Column widths here are matched by the designed widths in render.ts. */
+
+@page {
+  margin: 10mm;
+}
+
+#print-root {
+  color: #111;
+  background: #fff;
+  font: 9pt/1.35 "Segoe UI", Arial, Helvetica, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+#print-root * {
+  box-sizing: border-box;
+}
+
+#print-root .pr-page {
+  break-after: page;
+  page-break-after: always;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+#print-root .pr-page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+/* ---- header on every page: project, version, page title, page N of M ---- */
+#print-root .pr-header {
+  display: flex;
+  align-items: baseline;
+  gap: 6mm;
+  padding-bottom: 1.2mm;
+  margin-bottom: 3mm;
+  border-bottom: 0.3mm solid #111;
+  font-size: 8.5pt;
+  line-height: 1.2;
+}
+
+#print-root .pr-header-left {
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
+#print-root .pr-project {
+  font-weight: 700;
+}
+
+#print-root .pr-version {
+  margin-left: 2mm;
+  color: #444;
+}
+
+#print-root .pr-header-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#print-root .pr-header-page {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  color: #444;
+}
+
+/* ---- headings ---- */
+#print-root h1,
+#print-root h2,
+#print-root p,
+#print-root figure {
+  margin: 0;
+}
+
+#print-root .pr-title {
+  margin-bottom: 3mm;
+}
+
+#print-root .pr-title h1 {
+  font-size: 17pt;
+  line-height: 1.15;
+}
+
+#print-root .pr-title p {
+  font-size: 9.5pt;
+  color: #333;
+}
+
+#print-root .pr-step-heading {
+  font-size: 15pt;
+  line-height: 1.2;
+  margin-bottom: 3mm;
+}
+
+#print-root h2 {
+  font-size: 8pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 1.2mm;
+}
+
+/* ---- picture beside text; wraps to picture above text when the page is narrow (portrait) ---- */
+#print-root .pr-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4mm 5mm;
+}
+
+/* The bases add up to 235 mm with the gap: side by side on Letter landscape (279 mm) up to 22 mm margins. With
+   10 mm margins the columns grow to about 155 mm and 100 mm. Portrait (190 mm) still wraps. */
+#print-root .pr-figure {
+  flex: 3 1 140mm;
+  min-width: 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+#print-root .pr-side {
+  flex: 2 1 90mm;
+  min-width: 0;
+}
+
+#print-root .pr-step .pr-figure {
+  flex: 3 1 165mm;
+}
+
+#print-root .pr-step .pr-side {
+  flex: 1 1 72mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* The box has the captured aspect ratio and a max-width (both set inline, the max-width from a height limit in mm),
+   so the picture is never taller than the page allows and never distorted; the SVG lies exactly over the image. */
+#print-root .pr-pic {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  outline: 0.2mm solid #999;
+}
+
+#print-root .pr-pic img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+#print-root .pr-pic svg.pr-balloons {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#print-root .pr-caption {
+  margin-top: 1mm;
+  font-size: 7.5pt;
+  color: #444;
+  text-align: center;
+}
+
+/* ---- parts table: two lines per part (facts, then description) so 13 parts fit beside the picture ---- */
+#print-root .pr-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 7pt;
+  line-height: 1.22;
+}
+
+#print-root .pr-col-no { width: 6mm; }
+#print-root .pr-col-qty { width: 7mm; }
+#print-root .pr-col-made { width: 15mm; }
+#print-root .pr-col-material { width: 12mm; }
+#print-root .pr-col-pn { width: 27mm; }
+/* .pr-col-part takes the rest */
+
+#print-root .pr-table th,
+#print-root .pr-table td {
+  padding: 0.35mm 0.9mm;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+#print-root .pr-table thead th {
+  font-weight: 700;
+  background: #e9e9e9;
+}
+
+#print-root .pr-table thead tr:last-child th {
+  border-bottom: 0.3mm solid #111;
+  font-weight: 400;
+  font-style: italic;
+}
+
+#print-root .pr-table tbody.pr-row {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+#print-root .pr-table tbody.pr-row tr:first-child td {
+  padding-top: 0.7mm;
+  font-weight: 600;
+}
+
+#print-root .pr-table tbody.pr-row tr:last-child td {
+  padding-bottom: 0.7mm;
+  border-bottom: 0.15mm solid #999;
+  color: #222;
+}
+
+#print-root .pr-table .pr-no {
+  font-weight: 700;
+  font-size: 8pt;
+  text-align: center;
+  border-bottom: 0.15mm solid #999;
+}
+
+#print-root .pr-table thead .pr-no {
+  border-bottom: 0.3mm solid #111;
+  font-size: 7pt;
+}
+
+#print-root .pr-table .pr-qty {
+  text-align: center;
+}
+
+/* More than 14 rows (render.ts, DENSE_TABLE_ROWS): smaller and tighter, so a longer parts list stays on its page. */
+#print-root .pr-table-dense {
+  font-size: 6pt;
+  line-height: 1.12;
+}
+
+#print-root .pr-table-dense th,
+#print-root .pr-table-dense td {
+  padding: 0.15mm 0.8mm;
+}
+
+#print-root .pr-table-dense tbody.pr-row tr:first-child td {
+  padding-top: 0.35mm;
+}
+
+#print-root .pr-table-dense tbody.pr-row tr:last-child td {
+  padding-bottom: 0.35mm;
+}
+
+#print-root .pr-table-dense .pr-no {
+  font-size: 7pt;
+}
+
+/* The one line printed when the browser's own print command is used with no job set up (index.ts). */
+#print-root .pr-note {
+  margin: 20mm 0 0;
+  font-size: 12pt;
+}
+
+/* ---- step page: "You need" and the instruction ---- */
+#print-root .pr-need {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 4mm;
+  font-size: 10pt;
+}
+
+#print-root .pr-need td {
+  padding: 1mm 1mm;
+  vertical-align: middle;
+  border-bottom: 0.15mm solid #999;
+}
+
+#print-root .pr-need-no {
+  width: 9mm;
+}
+
+#print-root .pr-need-qty {
+  width: 13mm;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+#print-root .pr-chip {
+  display: inline-block;
+  min-width: 6mm;
+  height: 6mm;
+  line-height: 5.3mm;
+  border: 0.35mm solid #111;
+  border-radius: 3mm;
+  text-align: center;
+  font: 700 8.5pt/5.3mm Arial, Helvetica, sans-serif;
+  background: #fff;
+}
+
+#print-root .pr-step-text {
+  font-size: 11pt;
+  line-height: 1.4;
+}
+
+#print-root .pr-done {
+  margin-top: 4mm;
+  padding-top: 2mm;
+  border-top: 0.3mm solid #111;
+  font-weight: 700;
+}

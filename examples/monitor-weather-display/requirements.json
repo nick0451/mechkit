@@ -1,0 +1,15 @@
+{
+ "project": "Monitor weather display",
+ "about": "What done means. Each requirement has a check the pipeline can run, or is 'manual' (a person confirms it). See mechkit/requirements.py for the check types.",
+ "requirements": [
+  {"id": "R1", "text": "The display and the C3 board mount: holes line up, screws engage, nothing collides", "check": {"type": "mounts_pass"}},
+  {"id": "R2", "text": "Every printed part fits the Bambu A1 bed", "check": {"type": "parts_fit_bed", "bed_mm": 256}},
+  {"id": "R3", "text": "The clamp carries the unit plus a 5 N cable tug with a safety factor of 3", "check": {"type": "strength_min_safety_factor", "min": 3.0}},
+  {"id": "R4", "text": "Prints in under 4 hours", "check": {"type": "print_time_max_h", "max": 4}},
+  {"id": "R5", "text": "Nothing rises more than 24 mm up the front of the monitor (the picture is never covered)", "check": {"type": "manual"}},
+  {"id": "R6", "text": "Clamps on and comes off without marking the monitor; stays put when bumped", "check": {"type": "manual"}},
+  {"id": "R7", "text": "The screen is readable from the normal seat (tilt is right)", "check": {"type": "manual"}},
+  {"id": "R8", "text": "Shows day, time and weather; the background follows season, weather and sun position", "check": {"type": "manual"}},
+  {"id": "R9", "text": "The firmware builds from the pin map with no hand-edited pin numbers", "check": {"type": "manual"}}
+ ]
+}

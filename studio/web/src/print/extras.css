@@ -1,0 +1,162 @@
+/* Styles for the guide's extra pages (extras.ts): before you start, wiring, commissioning. Same scope and paper
+   assumptions as print.css: landscape A4 / Letter, 10 mm margins, content box at least 259 x 190 mm. */
+
+#print-root .pr-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8mm;
+  align-items: flex-start;
+}
+
+#print-root .pr-col {
+  flex: 1 1 110mm;
+  min-width: 0;
+}
+
+#print-root .pr-col-wide {
+  flex: 1.25 1 130mm;
+}
+
+#print-root .pr-cols h2,
+#print-root .pr-section h2 {
+  margin: 0 0 1.5mm;
+  font-size: 11pt;
+}
+
+#print-root .pr-col h2:not(:first-child) {
+  margin-top: 5mm;
+}
+
+/* tick-box lists: tools, consumables, commissioning checks */
+#print-root .pr-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 10pt;
+}
+
+#print-root .pr-checklist li {
+  display: grid;
+  grid-template-columns: 5.5mm 1fr;
+  column-gap: 1.5mm;
+  padding: 1mm 0;
+  border-bottom: 0.15mm solid #bbb;
+  break-inside: avoid;
+}
+
+#print-root .pr-box {
+  display: inline-block;
+  width: 3.6mm;
+  height: 3.6mm;
+  margin-top: 0.5mm;
+  border: 0.3mm solid #111;
+  background: #fff;
+}
+
+#print-root .pr-item-name {
+  font-weight: 600;
+}
+
+#print-root .pr-item-note {
+  grid-column: 2;
+  color: #333;
+  font-size: 8.5pt;
+}
+
+#print-root .pr-pairs {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 3mm;
+  font-size: 9.5pt;
+}
+
+#print-root .pr-pairs th {
+  text-align: left;
+  font-size: 8pt;
+  padding: 0.6mm 1mm;
+  border-bottom: 0.3mm solid #111;
+}
+
+#print-root .pr-pairs td {
+  padding: 0.9mm 1mm;
+  vertical-align: top;
+  border-bottom: 0.15mm solid #bbb;
+}
+
+#print-root .pr-pair-a {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#print-root .pr-done-col {
+  width: 10mm;
+  text-align: center;
+}
+
+#print-root .pr-small {
+  font-size: 8.5pt;
+  color: #333;
+  margin: 0 0 3mm;
+}
+
+#print-root .pr-callout {
+  margin: 4mm 0 0;
+  padding: 2mm 3mm;
+  border: 0.3mm solid #111;
+  border-left-width: 1.2mm;
+  font-size: 9.5pt;
+}
+
+/* wiring */
+#print-root .pr-wiring {
+  border: 0.2mm solid #999;
+  padding: 3mm;
+}
+
+#print-root .pr-wiring-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 135mm;
+}
+
+#print-root .pr-wiring-title {
+  font: 700 15px Arial, Helvetica, sans-serif;
+  fill: #111;
+}
+
+#print-root .pr-wiring-pin {
+  font: 700 14px Arial, Helvetica, sans-serif;
+  fill: #111;
+}
+
+#print-root .pr-wiring-signal {
+  font: 11px Arial, Helvetica, sans-serif;
+  fill: #333;
+}
+
+#print-root .pr-notes {
+  margin: 3mm 0 0;
+  padding-left: 4.5mm;
+  font-size: 9.5pt;
+}
+
+#print-root .pr-notes li {
+  margin-bottom: 1.2mm;
+}
+
+/* commissioning */
+#print-root .pr-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110mm, 1fr));
+  gap: 5mm 8mm;
+}
+
+#print-root .pr-section {
+  break-inside: avoid;
+}
+
+#print-root .pr-section-text {
+  margin: 0 0 1.5mm;
+  font-size: 10pt;
+}

@@ -1,0 +1,9 @@
+{
+ "about": "Material cards for simulation. Units MPa. tag: assumed (typical values, not yet matched to a print) or calibrated (fitted to the user's printed test bars). strength_mpa is along the layers; across_layers_factor scales it for loads that pull layers apart.",
+ "materials": {
+  "petg_printed_assumed": {
+   "tag": "assumed", "e_mpa": 1900.0, "nu": 0.38, "strength_mpa": 40.0, "across_layers_factor": 0.5,
+   "notes": "Typical printed PETG, 3 walls / 15 % infill treated as solid: stiffness and strength are optimistic for thick, mostly-infill sections. Replace with calibrated values after the bar test."
+  }
+ }
+}

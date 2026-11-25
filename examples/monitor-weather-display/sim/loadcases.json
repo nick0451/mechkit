@@ -1,0 +1,168 @@
+{
+ "about": "Clamp load cases (mm, N), written by sim/make_loadcases.py from the design parameters. World frame: X along the monitor edge, +Y toward the user, +Z up.",
+ "parts": [
+  {
+   "name": "Clamp",
+   "step": "exports/v0p9/Clamp_as_assembled.step",
+   "mesh_sizes": [
+    2.5,
+    1.6
+   ],
+   "material": "petg_printed_assumed",
+   "layers": "in_plane",
+   "notes": "printed on its side, so the layers run along the U profile",
+   "cases": [
+    {
+     "name": "clamp force",
+     "about": "the bolt pressing the monitor with 30 N: the back wall is pushed backward by the same force; the front lip bears on the bezel",
+     "min_safety_factor": 3.0,
+     "max_deflection_mm": 1.0,
+     "fix": [
+      {
+       "type": "plane",
+       "normal": [
+        0,
+        1,
+        0
+       ],
+       "offset": 0.0,
+       "box": [
+        [
+         -30,
+         -0.1,
+         0.0
+        ],
+        [
+         30,
+         0.1,
+         12.1
+        ]
+       ]
+      }
+     ],
+     "loads": [
+      {
+       "force": [
+        0,
+        -30.0,
+        0
+       ],
+       "on": {
+        "type": "cylinder",
+        "point": [
+         0.0,
+         -29.0,
+         12.0
+        ],
+        "axis": [
+         0,
+         1,
+         0
+        ],
+        "d": 4.5,
+        "span": [
+         0.0,
+         3.0
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "name": "cable tug",
+     "about": "the pod's weight plus a 5 N pull on the unit, carried by the two pod bolts",
+     "min_safety_factor": 3.0,
+     "max_deflection_mm": 0.5,
+     "fix": [
+      {
+       "type": "plane",
+       "normal": [
+        0,
+        0,
+        1
+       ],
+       "offset": 0.0,
+       "box": [
+        [
+         -30,
+         -21.5,
+         -0.1
+        ],
+        [
+         30,
+         0.0,
+         0.1
+        ]
+       ]
+      },
+      {
+       "type": "plane",
+       "normal": [
+        0,
+        1,
+        0
+       ],
+       "offset": 0.0,
+       "box": [
+        [
+         -30,
+         -0.1,
+         0.0
+        ],
+        [
+         30,
+         0.1,
+         12.1
+        ]
+       ]
+      }
+     ],
+     "loads": [
+      {
+       "force": [
+        0,
+        0,
+        -3.0
+       ],
+       "on": {
+        "type": "cylinder",
+        "point": [
+         -18.5,
+         -11.3356,
+         -22.3483
+        ],
+        "axis": [
+         0.0,
+         0.984808,
+         0.173648
+        ],
+        "d": 3.4
+       }
+      },
+      {
+       "force": [
+        0,
+        0,
+        -3.0
+       ],
+       "on": {
+        "type": "cylinder",
+        "point": [
+         18.5,
+         -11.3356,
+         -22.3483
+        ],
+        "axis": [
+         0.0,
+         0.984808,
+         0.173648
+        ],
+        "d": 3.4
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

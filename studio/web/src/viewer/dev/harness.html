@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>viewer harness</title>
+    <style>
+      body { margin: 0; background: #0e1116; color: #e6e9ee; font: 13px/1.4 Consolas, monospace; }
+      #view { width: 760px; height: 480px; border: 1px solid #2a3340; }
+      #hidden { display: none; width: 300px; height: 200px; }
+      #out { white-space: pre-wrap; padding: 8px; }
+      img { max-width: 480px; border: 1px solid #2a3340; margin: 4px; }
+      .row { display: flex; flex-wrap: wrap; align-items: flex-start; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <div id="view"></div>
+      <div id="imgs" class="row"></div>
+    </div>
+    <div id="hidden"></div>
+    <div id="out">running...</div>
+    <script type="module" src="./harness.ts"></script>
+  </body>
+</html>

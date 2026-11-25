@@ -1,0 +1,7 @@
+{
+ "about": "The ONLY place pin assignments are written. The firmware header and the wiring table are generated from this file.",
+ "board": {"name": "(fill in)", "platformio_board": "esp32-s3-devkitc-1"},
+ "pins": [
+  {"signal": "EXAMPLE_LED", "gpio": 48, "direction": "out", "connects_to": "on-board LED", "notes": "replace with the real signals"}
+ ]
+}

@@ -1,0 +1,126 @@
+{
+ "source": "sim/loadcases.json",
+ "solver": "ccx_i4_static.exe",
+ "cases": [
+  {
+   "part": "Clamp",
+   "case": "clamp force",
+   "layers": "in_plane",
+   "material": {
+    "name": "petg_printed_assumed",
+    "tag": "assumed",
+    "e_mpa": 1900.0,
+    "strength_mpa": 40.0,
+    "strength_used_mpa": 40.0
+   },
+   "applied_force_n": [
+    0.0,
+    -30.0,
+    0.0
+   ],
+   "reaction_n": [
+    -0.0,
+    30.0,
+    0.0
+   ],
+   "max_deflection_mm": 0.825903,
+   "peak_stress_mpa": 3.731,
+   "peak_stress_at": [
+    -2.1,
+    -24.0,
+    -0.0
+   ],
+   "p99_stress_mpa": 2.6986,
+   "stress_at_supports_mpa": 3.927,
+   "safety_factor": 10.72,
+   "safety_factor_along_layers": 10.72,
+   "safety_factor_across_layers": 5.36,
+   "mesh": {
+    "2.5": {
+     "nodes": 28951,
+     "peak_stress_mpa": 3.391,
+     "max_deflection_mm": 0.803431
+    },
+    "1.6": {
+     "nodes": 62152,
+     "peak_stress_mpa": 3.731,
+     "max_deflection_mm": 0.825903
+    }
+   },
+   "mesh_spread": 0.091,
+   "converged": true,
+   "setup": [
+    "fixed 556 surface triangles (576.0 mm2)",
+    "force [np.float64(0.0), np.float64(-30.0), np.float64(0.0)] N over 79 surface triangles (43.7 mm2)"
+   ],
+   "repeat_check": [
+    "two runs agree"
+   ],
+   "problems": [],
+   "warnings": [
+    "material is 'assumed': good for ranking, not for approval"
+   ]
+  },
+  {
+   "part": "Clamp",
+   "case": "cable tug",
+   "layers": "in_plane",
+   "material": {
+    "name": "petg_printed_assumed",
+    "tag": "assumed",
+    "e_mpa": 1900.0,
+    "strength_mpa": 40.0,
+    "strength_used_mpa": 40.0
+   },
+   "applied_force_n": [
+    0.0,
+    0.0,
+    -6.0
+   ],
+   "reaction_n": [
+    0.0,
+    -0.0,
+    6.0
+   ],
+   "max_deflection_mm": 0.011915,
+   "peak_stress_mpa": 0.347,
+   "peak_stress_at": [
+    8.3,
+    -12.0,
+    -10.2
+   ],
+   "p99_stress_mpa": 0.1385,
+   "stress_at_supports_mpa": 0.069,
+   "safety_factor": 115.27,
+   "safety_factor_along_layers": 115.27,
+   "safety_factor_across_layers": 57.64,
+   "mesh": {
+    "2.5": {
+     "nodes": 28951,
+     "peak_stress_mpa": 0.297,
+     "max_deflection_mm": 0.011597
+    },
+    "1.6": {
+     "nodes": 62152,
+     "peak_stress_mpa": 0.347,
+     "max_deflection_mm": 0.011915
+    }
+   },
+   "mesh_spread": 0.144,
+   "converged": true,
+   "setup": [
+    "fixed 1513 surface triangles (1606.6 mm2)",
+    "force [np.float64(0.0), np.float64(0.0), np.float64(-3.0)] N over 148 surface triangles (42.4 mm2)",
+    "force [np.float64(0.0), np.float64(0.0), np.float64(-3.0)] N over 146 surface triangles (42.4 mm2)"
+   ],
+   "repeat_check": [
+    "two runs agree"
+   ],
+   "problems": [],
+   "warnings": [
+    "material is 'assumed': good for ranking, not for approval"
+   ]
+  }
+ ],
+ "problems": []
+}

@@ -1,0 +1,10 @@
+{
+ "project": "{{NAME}}",
+ "about": "What done means. Each requirement has a check the pipeline can run, or is 'manual' (a person confirms it). See mechkit/requirements.py for the check types.",
+ "requirements": [
+  {"id": "R1", "text": "Every bought part mounts: holes line up, screws engage, nothing collides", "check": {"type": "mounts_pass"}},
+  {"id": "R2", "text": "Every printed part fits the printer bed", "check": {"type": "parts_fit_bed", "bed_mm": 256}},
+  {"id": "R3", "text": "Strong enough for its loads", "check": {"type": "strength_min_safety_factor", "min": 3.0}},
+  {"id": "R4", "text": "The user is happy with how it looks and feels in the hand", "check": {"type": "manual"}}
+ ]
+}

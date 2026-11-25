@@ -1,0 +1,51 @@
+{
+ "part": "esp32c3_supermini",
+ "prefix": "MCU",
+ "source": "length and width measured by the user 2026-11-24; thickness, USB socket and plug sizes are typical values, not checked",
+ "datum": "board centre on the PCB BOTTOM face; +Z component side; USB-C toward +Y",
+ "units": "mm",
+ "dims": {
+  "l": [
+   22.5,
+   "measured",
+   "board length (USB end to antenna end); user's calipers 2026-11-24"
+  ],
+  "w": [
+   18.0,
+   "measured",
+   "board width; user's calipers 2026-11-24"
+  ],
+  "pcb_t": [
+   1.2,
+   "assumed",
+   "PCB thickness"
+  ],
+  "usb_w": [
+   9.0,
+   "assumed",
+   "USB-C receptacle width"
+  ],
+  "usb_h": [
+   3.2,
+   "assumed",
+   "USB-C receptacle height above the PCB"
+  ],
+  "usb_overhang": [
+   1.2,
+   "assumed",
+   "receptacle past the board edge"
+  ],
+  "plug_w": [
+   12.5,
+   "assumed",
+   "USB-C cable plug overmold width"
+  ],
+  "plug_h": [
+   7.0,
+   "assumed",
+   "USB-C cable plug overmold height"
+  ]
+ },
+ "mounts": [],
+ "note": "Sits in a locating corner on the clamp's back wall, held with foam tape."
+}

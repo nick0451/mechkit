@@ -1,0 +1,1507 @@
+{
+ "about": "Presentation manifest written by mechkit.present.manifest (mm, world frame of the build). Do not edit: rebuild.",
+ "project": "Monitor weather display",
+ "version": "v0p9",
+ "document": "Monitor weather display_Presentation",
+ "cloud_folder": "Admin Project/Monitor weather display",
+ "up": [
+  0.0,
+  0.0,
+  1.0
+ ],
+ "assembled_bbox": [
+  [
+   -75.0,
+   -57.6,
+   -59.9161
+  ],
+  [
+   75.0,
+   9.9483,
+   90.0
+  ]
+ ],
+ "exploded_bbox": [
+  [
+   -24.0,
+   -129.6,
+   -56.44313644666139
+  ],
+  [
+   43.1,
+   108.4290753012208,
+   25.4
+  ]
+ ],
+ "exploded_offset": [
+  0.0,
+  0.0,
+  206.443
+ ],
+ "parts": [
+  {
+   "key": "Bezel",
+   "label": 1,
+   "kind": "printed",
+   "description": "Decorative gauge ring. Five pins on its back press into the pod face; held by friction, no glue.",
+   "colour": "#c8ccd2",
+   "name": "Bezel",
+   "part": "Bezel",
+   "part_number": "MWD-P1",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    98.4807753012208,
+    17.364817766693033
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Bezel.step",
+   "volume_mm3": 2387.9,
+   "bbox": [
+    [
+     -24.0,
+     -1.4216,
+     -58.1796
+    ],
+    [
+     24.0,
+     9.9483,
+     -10.5616
+    ]
+   ],
+   "centre": [
+    -0.0,
+    4.34,
+    -34.3404
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Pod",
+   "label": 2,
+   "kind": "printed",
+   "description": "Shell that holds the round display behind its window. Two M3 inserts in its back.",
+   "colour": "#2b2d31",
+   "name": "Pod",
+   "part": "Pod",
+   "part_number": "MWD-P2",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    72.87577372290339,
+    12.849965147352844
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Pod.step",
+   "volume_mm3": 8358.18,
+   "bbox": [
+    [
+     -24.0,
+     -10.0879,
+     -59.5688
+    ],
+    [
+     24.0,
+     7.1676,
+     -5.0
+    ]
+   ],
+   "centre": [
+    -0.0,
+    -1.9834,
+    -27.422
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Display_Board",
+   "label": 3,
+   "kind": "bought",
+   "description": "1.28 inch round 240 x 240 display, 7-pin board with a tab. Seven wires soldered to its pads.",
+   "colour": "#2f6fb5",
+   "name": "Display GC9A01 (board)",
+   "part": "Round display GC9A01 1.28 in",
+   "part_number": "GC9A01-1.28",
+   "material": "",
+   "explode": [
+    0.0,
+    39.39231012048832,
+    6.945927106677213
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Display_Board.step",
+   "volume_mm3": 2186.26,
+   "bbox": [
+    [
+     -19.0,
+     -5.9348,
+     -54.0196
+    ],
+    [
+     19.0,
+     3.5419,
+     -8.933
+    ]
+   ],
+   "centre": [
+    -0.0,
+    -1.1716,
+    -31.4065
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Display_Screen",
+   "label": 3,
+   "kind": "bought",
+   "description": "1.28 inch round 240 x 240 display, 7-pin board with a tab. Seven wires soldered to its pads.",
+   "colour": "#0b0e11",
+   "name": "Display GC9A01 (screen)",
+   "part": "Round display GC9A01 1.28 in",
+   "part_number": "GC9A01-1.28",
+   "material": "",
+   "explode": [
+    0.0,
+    39.39231012048832,
+    6.945927106677213
+   ],
+   "count": 0,
+   "opacity": 1.0,
+   "step": "Display_Screen.step",
+   "volume_mm3": 1678.34,
+   "bbox": [
+    [
+     -17.8,
+     -3.6298,
+     -52.56
+    ],
+    [
+     17.8,
+     4.8107,
+     -12.8088
+    ]
+   ],
+   "centre": [
+    -0.0,
+    0.6579,
+    -33.0672
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Cover",
+   "label": 4,
+   "kind": "printed",
+   "description": "Back plate of the pod. Four pads press the display board into its pocket; slot for the wires.",
+   "colour": "#3a3d42",
+   "name": "Cover",
+   "part": "Cover",
+   "part_number": "MWD-P3",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    19.69615506024416,
+    3.4729635533386065
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Cover.step",
+   "volume_mm3": 4544.98,
+   "bbox": [
+    [
+     -24.0,
+     -12.0575,
+     -59.9161
+    ],
+    [
+     24.0,
+     1.5523,
+     -6.3892
+    ]
+   ],
+   "centre": [
+    0.0,
+    -6.5287,
+    -32.0466
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Clamp",
+   "label": 5,
+   "kind": "printed",
+   "description": "Saddle over the monitor's bottom edge, with the tilted hanger for the pod and the back wall that carries the board.",
+   "colour": "#2b2d31",
+   "name": "Clamp",
+   "part": "Clamp",
+   "part_number": "MWD-P4",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Clamp.step",
+   "volume_mm3": 23260.37,
+   "bbox": [
+    [
+     -24.0,
+     -34.7,
+     -31.0665
+    ],
+    [
+     41.5,
+     3.0,
+     25.4
+    ]
+   ],
+   "centre": [
+    3.8309,
+    -19.1018,
+    1.6325
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Insert_M3_pod_L",
+   "label": 6,
+   "kind": "hardware",
+   "description": "Brass heat-set insert M3, 5.1 long, in a 4.0 mm hole. Set with a soldering iron.",
+   "colour": "#b8862b",
+   "name": "Insert M3 (pod, left)",
+   "part": "Heat-set insert M3",
+   "part_number": "MWD-H1",
+   "material": "Brass",
+   "explode": [
+    0.0,
+    55.14923416868365,
+    9.724297949348099
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Insert_M3_pod_L.step",
+   "volume_mm3": 28.04,
+   "bbox": [
+    [
+     -20.5,
+     -7.7437,
+     -23.6233
+    ],
+    [
+     -16.5,
+     -2.0265,
+     -18.7985
+    ]
+   ],
+   "centre": [
+    -18.5,
+    -4.8851,
+    -21.2109
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Insert_M3_pod_R",
+   "label": 6,
+   "kind": "hardware",
+   "description": "Brass heat-set insert M3, 5.1 long, in a 4.0 mm hole. Set with a soldering iron.",
+   "colour": "#b8862b",
+   "name": "Insert M3 (pod, right)",
+   "part": "Heat-set insert M3",
+   "part_number": "MWD-H1",
+   "material": "Brass",
+   "explode": [
+    0.0,
+    55.14923416868365,
+    9.724297949348099
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Insert_M3_pod_R.step",
+   "volume_mm3": 28.04,
+   "bbox": [
+    [
+     16.5,
+     -7.7437,
+     -23.6233
+    ],
+    [
+     20.5,
+     -2.0265,
+     -18.7985
+    ]
+   ],
+   "centre": [
+    18.5,
+    -4.8851,
+    -21.2109
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Insert_M3_cap",
+   "label": 6,
+   "kind": "hardware",
+   "description": "Brass heat-set insert M3, 5.1 long, in a 4.0 mm hole. Set with a soldering iron.",
+   "colour": "#b8862b",
+   "name": "Insert M3 (board cap)",
+   "part": "Heat-set insert M3",
+   "part_number": "MWD-H1",
+   "material": "Brass",
+   "explode": [
+    0.0,
+    -10.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Insert_M3_cap.step",
+   "volume_mm3": 28.04,
+   "bbox": [
+    [
+     12.5,
+     -32.0,
+     11.0
+    ],
+    [
+     16.5,
+     -26.9,
+     15.0
+    ]
+   ],
+   "centre": [
+    14.5,
+    -29.45,
+    13.0
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Bolt_M3x10_pod_L",
+   "label": 7,
+   "kind": "hardware",
+   "description": "Socket-head M3 x 10 machine screw.",
+   "colour": "#9aa0a8",
+   "name": "Bolt M3 x 10 (pod, left)",
+   "part": "Bolt M3 x 10, socket head",
+   "part_number": "MWD-H2",
+   "material": "Steel",
+   "explode": [
+    0.0,
+    -29.544232590366242,
+    -5.2094453300079095
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Bolt_M3x10_pod_L.step",
+   "volume_mm3": 141.96,
+   "bbox": [
+    [
+     -21.25,
+     -16.7372,
+     -25.9248
+    ],
+    [
+     -15.75,
+     -3.1967,
+     -19.4819
+    ]
+   ],
+   "centre": [
+    -18.5,
+    -11.5951,
+    -22.3941
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Bolt_M3x10_pod_R",
+   "label": 7,
+   "kind": "hardware",
+   "description": "Socket-head M3 x 10 machine screw.",
+   "colour": "#9aa0a8",
+   "name": "Bolt M3 x 10 (pod, right)",
+   "part": "Bolt M3 x 10, socket head",
+   "part_number": "MWD-H2",
+   "material": "Steel",
+   "explode": [
+    0.0,
+    -29.544232590366242,
+    -5.2094453300079095
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Bolt_M3x10_pod_R.step",
+   "volume_mm3": 141.96,
+   "bbox": [
+    [
+     15.75,
+     -16.7372,
+     -25.9248
+    ],
+    [
+     21.25,
+     -3.1967,
+     -19.4819
+    ]
+   ],
+   "centre": [
+    18.5,
+    -11.5951,
+    -22.3941
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Bolt_M3x10_cap",
+   "label": 7,
+   "kind": "hardware",
+   "description": "Socket-head M3 x 10 machine screw.",
+   "colour": "#9aa0a8",
+   "name": "Bolt M3 x 10 (board cap)",
+   "part": "Bolt M3 x 10, socket head",
+   "part_number": "MWD-H2",
+   "material": "Steel",
+   "explode": [
+    0.0,
+    -68.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Bolt_M3x10_cap.step",
+   "volume_mm3": 141.96,
+   "bbox": [
+    [
+     11.75,
+     -38.0,
+     10.25
+    ],
+    [
+     17.25,
+     -25.0,
+     15.75
+    ]
+   ],
+   "centre": [
+    14.5,
+    -33.2635,
+    13.0
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Jaw",
+   "label": 8,
+   "kind": "printed",
+   "description": "Pressure plate between the clamp screw and the monitor's back. Spreads the grip so the unit cannot twist.",
+   "colour": "#8a8f98",
+   "name": "Jaw",
+   "part": "Jaw",
+   "part_number": "MWD-P5",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    13.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Jaw.step",
+   "volume_mm3": 2354.29,
+   "bbox": [
+    [
+     -22.0,
+     -24.5,
+     1.5
+    ],
+    [
+     22.0,
+     -21.5,
+     19.5
+    ]
+   ],
+   "centre": [
+    -0.0,
+    -22.9917,
+    10.4862
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Insert_M4_clamp",
+   "label": 9,
+   "kind": "hardware",
+   "description": "Brass heat-set insert M4 in a 4.5 mm pocket, set from inside the saddle so clamping seats it.",
+   "colour": "#b8862b",
+   "name": "Insert M4 (clamp)",
+   "part": "Heat-set insert M4",
+   "part_number": "MWD-H3",
+   "material": "Brass",
+   "explode": [
+    0.0,
+    6.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Insert_M4_clamp.step",
+   "volume_mm3": 13.35,
+   "bbox": [
+    [
+     -2.25,
+     -30.0,
+     9.75
+    ],
+    [
+     2.25,
+     -26.0,
+     14.25
+    ]
+   ],
+   "centre": [
+    -0.0,
+    -28.0,
+    12.0
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Screw_M4x30",
+   "label": 10,
+   "kind": "hardware",
+   "description": "Socket-head M4 x 30: the clamp screw. Runs through the M4 insert and presses on the jaw.",
+   "colour": "#9aa0a8",
+   "name": "Clamp screw M4 x 30",
+   "part": "Screw M4 x 30, socket head",
+   "part_number": "MWD-H4",
+   "material": "Steel",
+   "explode": [
+    0.0,
+    -40.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Screw_M4x30.step",
+   "volume_mm3": 530.93,
+   "bbox": [
+    [
+     -3.5,
+     -57.3,
+     8.5
+    ],
+    [
+     3.5,
+     -23.3,
+     15.5
+    ]
+   ],
+   "centre": [
+    0.0,
+    -43.229,
+    12.0
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Knob",
+   "label": 11,
+   "kind": "printed",
+   "description": "Thumb knob pressed onto the clamp screw's head.",
+   "colour": "#b0343a",
+   "name": "Knob",
+   "part": "Knob",
+   "part_number": "MWD-P6",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    -72.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Knob.step",
+   "volume_mm3": 1824.48,
+   "bbox": [
+    [
+     -8.8854,
+     -57.6,
+     3.1146
+    ],
+    [
+     8.8854,
+     -48.6,
+     20.8854
+    ]
+   ],
+   "centre": [
+    -0.0,
+    -52.9587,
+    12.0
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Board",
+   "label": 12,
+   "kind": "bought",
+   "description": "Microcontroller board, 22.5 x 18 mm, USB-C pointing up. Sits on the back wall with its lower edge in the ledge.",
+   "colour": "#3f8a4a",
+   "name": "ESP32-C3 SuperMini",
+   "part": "ESP32-C3 SuperMini",
+   "part_number": "ESP32-C3-SuperMini",
+   "material": "",
+   "explode": [
+    0.0,
+    -22.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Board.step",
+   "volume_mm3": 687.6,
+   "bbox": [
+    [
+     20.4,
+     -36.4,
+     1.5
+    ],
+    [
+     38.4,
+     -32.0,
+     25.2
+    ]
+   ],
+   "centre": [
+    29.4,
+    -33.245,
+    15.3741
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Board_Cap",
+   "label": 13,
+   "kind": "printed",
+   "description": "Cap over the board. Hooks round the end of the back wall and is bolted on; takes the pull when the cable is unplugged.",
+   "colour": "#4a4e55",
+   "name": "Board_Cap",
+   "part": "Board_Cap",
+   "part_number": "MWD-P7",
+   "material": "PETG",
+   "explode": [
+    0.0,
+    -46.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 1.0,
+   "step": "Board_Cap.step",
+   "volume_mm3": 2529.57,
+   "bbox": [
+    [
+     10.5,
+     -38.6,
+     -0.5
+    ],
+    [
+     43.1,
+     -24.6,
+     25.4
+    ]
+   ],
+   "centre": [
+    29.6491,
+    -35.4932,
+    12.9215
+   ],
+   "bodies": 1
+  },
+  {
+   "key": "Monitor",
+   "label": 0,
+   "kind": "reference",
+   "description": "Piece of the monitor's bottom edge: 21.5 mm thick where the clamp sits.",
+   "colour": "#3a3d42",
+   "name": "Monitor (for context)",
+   "part": "Monitor (for context)",
+   "part_number": "",
+   "material": "",
+   "explode": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "count": 1,
+   "opacity": 0.25,
+   "step": "Monitor.step",
+   "volume_mm3": 290250.0,
+   "bbox": [
+    [
+     -75.0,
+     -21.5,
+     0.0
+    ],
+    [
+     75.0,
+     0.0,
+     90.0
+    ]
+   ],
+   "centre": [
+    0.0,
+    -10.75,
+    45.0
+   ],
+   "bodies": 1
+  }
+ ],
+ "views": [
+  {
+   "name": "Front",
+   "eye": [
+    140.0,
+    250.0,
+    40.0
+   ],
+   "target": [
+    0.0,
+    -14.0,
+    -14.0
+   ],
+   "up": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "assembled"
+  },
+  {
+   "name": "Side",
+   "eye": [
+    330.0,
+    -15.0,
+    -10.0
+   ],
+   "target": [
+    0.0,
+    -14.0,
+    -14.0
+   ],
+   "up": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "assembled"
+  },
+  {
+   "name": "Rear",
+   "eye": [
+    120.0,
+    -260.0,
+    60.0
+   ],
+   "target": [
+    0.0,
+    -22.0,
+    -8.0
+   ],
+   "up": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "assembled"
+  },
+  {
+   "name": "Exploded",
+   "eye": [
+    330.0,
+    150.0,
+    150.0
+   ],
+   "target": [
+    0.0,
+    -20.0,
+    -10.0
+   ],
+   "up": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "exploded"
+  },
+  {
+   "name": "Exploded rear",
+   "eye": [
+    300.0,
+    -260.0,
+    150.0
+   ],
+   "target": [
+    0.0,
+    -20.0,
+    -10.0
+   ],
+   "up": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "group": "exploded"
+  }
+ ],
+ "steps": [
+  {
+   "title": "Set the inserts in the pod",
+   "text": "Press the two M3 inserts into the holes in the pod's back with a soldering iron, flush with the surface.",
+   "add": [
+    "Pod",
+    "Insert_M3_pod_L",
+    "Insert_M3_pod_R"
+   ],
+   "view": {
+    "eye": [
+     150.0,
+     -260.0,
+     120.0
+    ],
+    "target": [
+     0.0,
+     -6.0,
+     -30.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Insert_M3_pod_L": [
+     0.0,
+     -15.756924048195328,
+     -2.7783708426708853
+    ],
+    "Insert_M3_pod_R": [
+     0.0,
+     -15.756924048195328,
+     -2.7783708426708853
+    ]
+   }
+  },
+  {
+   "title": "Set the inserts in the clamp",
+   "text": "M3 insert into the back wall from behind (for the board cap). M4 insert into its pocket from INSIDE the saddle, so that clamping pushes it against the pocket's floor.",
+   "add": [
+    "Clamp",
+    "Insert_M3_cap",
+    "Insert_M4_clamp"
+   ],
+   "view": {
+    "eye": [
+     130.0,
+     -170.0,
+     320.0
+    ],
+    "target": [
+     5.0,
+     -24.0,
+     8.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Insert_M3_cap": [
+     0.0,
+     -14.0,
+     0.0
+    ],
+    "Insert_M4_clamp": [
+     0.0,
+     10.0,
+     0.0
+    ]
+   }
+  },
+  {
+   "title": "Wire and seat the display",
+   "text": "Solder the seven wires to the display's pads (see the wiring page). Lay the display in the pod from the back, screen toward the window, tab toward the flat top. The ribbon fold and the solder ends have their own reliefs.",
+   "add": [
+    "Display_Board",
+    "Display_Screen"
+   ],
+   "view": {
+    "eye": [
+     330.0,
+     -70.0,
+     110.0
+    ],
+    "target": [
+     0.0,
+     -6.0,
+     -30.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Pod": [
+     0.0,
+     43.331541132537154,
+     7.640519817344934
+    ],
+    "Insert_M3_pod_L": [
+     0.0,
+     43.331541132537154,
+     7.640519817344934
+    ],
+    "Insert_M3_pod_R": [
+     0.0,
+     43.331541132537154,
+     7.640519817344934
+    ],
+    "Display_Board": [
+     0.0,
+     19.69615506024416,
+     3.4729635533386065
+    ],
+    "Display_Screen": [
+     0.0,
+     19.69615506024416,
+     3.4729635533386065
+    ]
+   }
+  },
+  {
+   "title": "Close the pod and hang it on the clamp",
+   "text": "Feed the wires through the slot in the cover and the hanger. Put the cover on, hold the pod against the hanger and fasten with two M3 x 10 bolts from behind.",
+   "add": [
+    "Cover",
+    "Bolt_M3x10_pod_L",
+    "Bolt_M3x10_pod_R"
+   ],
+   "view": {
+    "eye": [
+     330.0,
+     -70.0,
+     110.0
+    ],
+    "target": [
+     0.0,
+     -6.0,
+     -30.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Pod": [
+     0.0,
+     35.45307910843949,
+     6.251334396009492
+    ],
+    "Insert_M3_pod_L": [
+     0.0,
+     35.45307910843949,
+     6.251334396009492
+    ],
+    "Insert_M3_pod_R": [
+     0.0,
+     35.45307910843949,
+     6.251334396009492
+    ],
+    "Display_Board": [
+     0.0,
+     35.45307910843949,
+     6.251334396009492
+    ],
+    "Display_Screen": [
+     0.0,
+     35.45307910843949,
+     6.251334396009492
+    ],
+    "Cover": [
+     0.0,
+     15.756924048195328,
+     2.7783708426708853
+    ],
+    "Bolt_M3x10_pod_L": [
+     0.0,
+     -25.60500157831741,
+     -4.514852619340188
+    ],
+    "Bolt_M3x10_pod_R": [
+     0.0,
+     -25.60500157831741,
+     -4.514852619340188
+    ]
+   }
+  },
+  {
+   "title": "Press on the bezel",
+   "text": "Line up the five pins with the holes in the pod's face and press. It holds by friction; no glue needed.",
+   "add": [
+    "Bezel"
+   ],
+   "view": {
+    "eye": [
+     220.0,
+     240.0,
+     120.0
+    ],
+    "target": [
+     0.0,
+     -6.0,
+     -30.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Bezel": [
+     0.0,
+     21.665770566268577,
+     3.820259908672467
+    ]
+   }
+  },
+  {
+   "title": "Fit the board and its cap",
+   "text": "Solder the wires to the ESP32-C3 board (see the wiring page). Tuck its lower edge behind the ledge lip on the back wall, USB socket up. Hook the cap round the end of the wall and fasten it with one M3 x 10 bolt.",
+   "add": [
+    "Board",
+    "Board_Cap",
+    "Bolt_M3x10_cap"
+   ],
+   "view": {
+    "eye": [
+     150.0,
+     -260.0,
+     120.0
+    ],
+    "target": [
+     5.0,
+     -24.0,
+     8.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Board": [
+     0.0,
+     -14.0,
+     0.0
+    ],
+    "Board_Cap": [
+     0.0,
+     -34.0,
+     0.0
+    ],
+    "Bolt_M3x10_cap": [
+     0.0,
+     -54.0,
+     0.0
+    ]
+   }
+  },
+  {
+   "title": "Fit the clamp screw",
+   "text": "Press the knob onto the M4 x 30 screw's head. Run the screw through the M4 insert from behind. Stand the jaw in the saddle with its socket on the screw's tip. Hang the unit on the monitor's bottom edge and tighten gently.",
+   "add": [
+    "Screw_M4x30",
+    "Knob",
+    "Jaw"
+   ],
+   "view": {
+    "eye": [
+     130.0,
+     -170.0,
+     320.0
+    ],
+    "target": [
+     5.0,
+     -24.0,
+     8.0
+    ],
+    "up": [
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "pull": {
+    "Screw_M4x30": [
+     0.0,
+     -34.0,
+     0.0
+    ],
+    "Knob": [
+     0.0,
+     -58.0,
+     0.0
+    ],
+    "Jaw": [
+     0.0,
+     0.0,
+     34.0
+    ]
+   }
+  }
+ ],
+ "guide": {
+  "tools": [
+   {
+    "name": "Soldering iron, fine tip",
+    "note": "for the seven wires and for pressing in the four inserts"
+   },
+   {
+    "name": "Hex key 2.5 mm",
+    "note": "M3 socket-head bolts"
+   },
+   {
+    "name": "Hex key 3 mm",
+    "note": "the M4 clamp screw, before the knob is on"
+   },
+   {
+    "name": "Wire strippers and flush cutters",
+    "note": ""
+   },
+   {
+    "name": "Tweezers",
+    "note": "to hold the wires on the display's pads"
+   },
+   {
+    "name": "USB-C data cable",
+    "note": "power and firmware; a charge-only cable will not work for the firmware"
+   },
+   {
+    "name": "Computer with PlatformIO",
+    "note": "to load the firmware"
+   }
+  ],
+  "consumables": [
+   {
+    "name": "Solder",
+    "note": ""
+   },
+   {
+    "name": "Thin stranded hook-up wire",
+    "note": "7 pieces, about 80 mm each: from the display's tab, through the slot in the cover and hanger, under the saddle, up the back wall to the board"
+   },
+   {
+    "name": "Felt or thin rubber pads (optional)",
+    "note": "on the jaw and the front lip; the build holds without them"
+   }
+  ],
+  "printing": {
+   "settings": [
+    {
+     "name": "Printer",
+     "value": "Bambu A1"
+    },
+    {
+     "name": "Material",
+     "value": "PETG"
+    },
+    {
+     "name": "Plate",
+     "value": "textured PEI"
+    },
+    {
+     "name": "Supports",
+     "value": "none: every part is oriented to print without"
+    },
+    {
+     "name": "Other settings",
+     "value": "the slicer's standard PETG profile (layer height and infill were not recorded for this build)"
+    }
+   ],
+   "parts": [
+    {
+     "part": "Pod",
+     "orientation": "front face down"
+    },
+    {
+     "part": "Bezel",
+     "orientation": "front face down, pins up"
+    },
+    {
+     "part": "Cover",
+     "orientation": "plate down, pads up"
+    },
+    {
+     "part": "Clamp",
+     "orientation": "lying on its left end, so the layers run along the U shape"
+    },
+    {
+     "part": "Jaw",
+     "orientation": "flat, socket up"
+    },
+    {
+     "part": "Knob",
+     "orientation": "head pocket up"
+    },
+    {
+     "part": "Board_Cap",
+     "orientation": "outer skin down, cavity up"
+    }
+   ],
+   "note": "Print files: exports/v0p9/*.stl, already turned to these orientations."
+  },
+  "wiring": {
+   "title": "Wiring: display to board",
+   "from": "ESP32-C3 SuperMini",
+   "to": "Display GC9A01",
+   "wires": [
+    {
+     "from": "3V3",
+     "to": "VCC",
+     "signal": "power",
+     "note": ""
+    },
+    {
+     "from": "GND",
+     "to": "GND",
+     "signal": "ground",
+     "note": ""
+    },
+    {
+     "from": "GPIO4",
+     "to": "SCL",
+     "signal": "TFT_SCLK",
+     "note": "SPI clock"
+    },
+    {
+     "from": "GPIO6",
+     "to": "SDA",
+     "signal": "TFT_MOSI",
+     "note": "SPI data"
+    },
+    {
+     "from": "GPIO7",
+     "to": "CS",
+     "signal": "TFT_CS",
+     "note": ""
+    },
+    {
+     "from": "GPIO10",
+     "to": "DC",
+     "signal": "TFT_DC",
+     "note": ""
+    },
+    {
+     "from": "GPIO3",
+     "to": "RST",
+     "signal": "TFT_RST",
+     "note": ""
+    }
+   ],
+   "notes": [
+    "Match the wires to the NAMES printed beside the pads; the order of the pads differs between display boards.",
+    "The display runs on 3.3 V: connect VCC to the board's 3V3 pin, not to 5V.",
+    "Do not use GPIO2, GPIO8 or GPIO9 (boot pins) or GPIO18 / GPIO19 (USB).",
+    "Pin choice status in pinmap.json: proposed 2026-11-24, not yet wired or tested."
+   ]
+  },
+  "commissioning": [
+   {
+    "title": "Load the firmware",
+    "text": "Plug the board into the computer with the USB-C data cable. In the project's firmware folder run:  pio run -t upload",
+    "checks": [
+     "The upload ends with SUCCESS",
+     "If the board is not found: hold its BOOT button while plugging in, then upload again"
+    ]
+   },
+   {
+    "title": "First start",
+    "text": "On first start the display opens its own Wi-Fi network, WeatherDisplay-Setup. Join it with a phone, choose your Wi-Fi network and enter its password. Latitude and longitude are optional; without them the location is estimated from the internet address.",
+    "checks": [
+     "The setup network appears",
+     "After saving, the unit joins your Wi-Fi"
+    ]
+   },
+   {
+    "title": "Functional test",
+    "text": "Leave it running for a few minutes.",
+    "checks": [
+     "The picture is upright and centred in the bezel (if not: DISPLAY_ROTATION in firmware/src/main.cpp)",
+     "Day and 12-hour time are correct",
+     "Temperature is shown in Fahrenheit and looks right for where you are",
+     "The background matches the time of day and the weather",
+     "Colours are right (red is red, not blue)"
+    ]
+   },
+   {
+    "title": "Final inspection",
+    "text": "",
+    "checks": [
+     "The clamp screw is snug, the unit does not twist, and nothing presses on the picture area of the monitor",
+     "The cable can be unplugged and plugged without the board moving",
+     "No wire is pinched under the saddle or the board cap",
+     "The bezel sits flat all round"
+    ]
+   }
+  ],
+  "notes": [
+   "Firmware status when this guide was made: it compiles, but had not yet been run on the finished unit. Treat the commissioning page as the first real test."
+  ]
+ },
+ "table": [
+  {
+   "label": 1,
+   "part": "Bezel",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P1",
+   "description": "Decorative gauge ring. Five pins on its back press into the pod face; held by friction, no glue."
+  },
+  {
+   "label": 2,
+   "part": "Pod",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P2",
+   "description": "Shell that holds the round display behind its window. Two M3 inserts in its back."
+  },
+  {
+   "label": 3,
+   "part": "Round display GC9A01 1.28 in",
+   "qty": 1,
+   "kind": "bought",
+   "made": "bought",
+   "material": "",
+   "part_number": "GC9A01-1.28",
+   "description": "1.28 inch round 240 x 240 display, 7-pin board with a tab. Seven wires soldered to its pads."
+  },
+  {
+   "label": 4,
+   "part": "Cover",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P3",
+   "description": "Back plate of the pod. Four pads press the display board into its pocket; slot for the wires."
+  },
+  {
+   "label": 5,
+   "part": "Clamp",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P4",
+   "description": "Saddle over the monitor's bottom edge, with the tilted hanger for the pod and the back wall that carries the board."
+  },
+  {
+   "label": 6,
+   "part": "Heat-set insert M3",
+   "qty": 3,
+   "kind": "hardware",
+   "made": "hardware",
+   "material": "Brass",
+   "part_number": "MWD-H1",
+   "description": "Brass heat-set insert M3, 5.1 long, in a 4.0 mm hole. Set with a soldering iron."
+  },
+  {
+   "label": 7,
+   "part": "Bolt M3 x 10, socket head",
+   "qty": 3,
+   "kind": "hardware",
+   "made": "hardware",
+   "material": "Steel",
+   "part_number": "MWD-H2",
+   "description": "Socket-head M3 x 10 machine screw."
+  },
+  {
+   "label": 8,
+   "part": "Jaw",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P5",
+   "description": "Pressure plate between the clamp screw and the monitor's back. Spreads the grip so the unit cannot twist."
+  },
+  {
+   "label": 9,
+   "part": "Heat-set insert M4",
+   "qty": 1,
+   "kind": "hardware",
+   "made": "hardware",
+   "material": "Brass",
+   "part_number": "MWD-H3",
+   "description": "Brass heat-set insert M4 in a 4.5 mm pocket, set from inside the saddle so clamping seats it."
+  },
+  {
+   "label": 10,
+   "part": "Screw M4 x 30, socket head",
+   "qty": 1,
+   "kind": "hardware",
+   "made": "hardware",
+   "material": "Steel",
+   "part_number": "MWD-H4",
+   "description": "Socket-head M4 x 30: the clamp screw. Runs through the M4 insert and presses on the jaw."
+  },
+  {
+   "label": 11,
+   "part": "Knob",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P6",
+   "description": "Thumb knob pressed onto the clamp screw's head."
+  },
+  {
+   "label": 12,
+   "part": "ESP32-C3 SuperMini",
+   "qty": 1,
+   "kind": "bought",
+   "made": "bought",
+   "material": "",
+   "part_number": "ESP32-C3-SuperMini",
+   "description": "Microcontroller board, 22.5 x 18 mm, USB-C pointing up. Sits on the back wall with its lower edge in the ledge."
+  },
+  {
+   "label": 13,
+   "part": "Board_Cap",
+   "qty": 1,
+   "kind": "printed",
+   "made": "3D printed",
+   "material": "PETG",
+   "part_number": "MWD-P7",
+   "description": "Cap over the board. Hooks round the end of the back wall and is bolted on; takes the pull when the cable is unplugged."
+  }
+ ]
+}

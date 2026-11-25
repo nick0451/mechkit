@@ -1,0 +1,176 @@
+{
+ "version": "v0p9",
+ "params": {
+  "mon_thick": 21.5,
+  "mon_chin": 24.0,
+  "tilt_deg": 10.0,
+  "face_y": 3.0,
+  "plate_t": 4.0,
+  "lip_t": 3.0,
+  "lip_h": 12.0,
+  "back_gap": 4.5,
+  "pad_t": 1.0,
+  "back_t": 6.0,
+  "back_h": 25.4,
+  "bolt_z": 12.0,
+  "bolt_x_clamp": 0.0,
+  "wall_x1": 41.5,
+  "root_fillet": 2.5,
+  "hanger_t": 4.0,
+  "hanger_low_v": 6.0,
+  "pod_gap": 1.0,
+  "board_x0": 20.2,
+  "board_z0": 1.5,
+  "ledge_t": 1.6,
+  "ledge_slot": 1.5,
+  "ledge_lip_t": 1.2,
+  "ledge_lip_h": 1.0,
+  "cap_cavity": 5.0,
+  "cap_skin": 1.6,
+  "cap_play": 0.3,
+  "cap_top_t": 1.2,
+  "cap_bolt_x": 14.5,
+  "cap_bolt_z": 13.0,
+  "cap_ear_x0": 10.5,
+  "cap_seat_t": 3.0,
+  "cap_cb_d": 6.2,
+  "cap_hook_z": [
+   6.0,
+   20.0
+  ],
+  "cap_hook_t": 1.4,
+  "cap_lip": 1.2,
+  "pod_w": 48.0,
+  "pod_top_v": 30.0,
+  "pod_depth": 8.0,
+  "lip_front": 1.2,
+  "window_d": 33.0,
+  "fit": 0.4,
+  "bolt_x": 18.5,
+  "bolt_v": 14.5,
+  "fpc_clear": 0.6,
+  "pin_channel_clear": 0.4,
+  "pin_channel_h": 3.2,
+  "bezel_od": 48.0,
+  "bezel_h": 3.0,
+  "bezel_bore_front": 38.0,
+  "bezel_pin_d": 1.8,
+  "bezel_pin_l": 1.4,
+  "bezel_hole_d": 2.1,
+  "bezel_hole_depth": 1.6,
+  "bezel_pin_r": 21.7,
+  "bezel_pin_angles": [
+   50,
+   130,
+   210,
+   270,
+   330
+  ],
+  "tick_w": 0.8,
+  "tick_depth": 0.5,
+  "cover_t": 2.0,
+  "pad_play": 0.2,
+  "wire_slot": [
+   16.0,
+   6.0
+  ],
+  "wire_slot_v": 24.0,
+  "insert_hole_d": 4.0,
+  "insert_l": 5.1,
+  "m3_clear": 3.4,
+  "bolt_l": 10.0,
+  "head_d": 5.5,
+  "head_h": 3.0,
+  "m4_len": 30.0,
+  "m4_insert_hole_d": 4.5,
+  "m4_insert_l": 4.0,
+  "m4_clear": 4.4,
+  "m4_head_d": 7.0,
+  "m4_head_h": 4.0,
+  "jaw_w": 44.0,
+  "jaw_h": 18.0,
+  "jaw_t": 3.0,
+  "jaw_socket": 1.2,
+  "jaw_z0": 1.5,
+  "knob_d": 18.0,
+  "knob_h": 9.0
+ },
+ "parts": {
+  "Pod": {
+   "volume_mm3": 8358.2,
+   "print_size": [
+    48.0,
+    54.0,
+    8.0
+   ],
+   "valid": true
+  },
+  "Cover": {
+   "volume_mm3": 4545.0,
+   "print_size": [
+    48.0,
+    54.0,
+    5.4
+   ],
+   "valid": true
+  },
+  "Clamp": {
+   "volume_mm3": 23260.4,
+   "print_size": [
+    56.5,
+    37.7,
+    65.5
+   ],
+   "valid": true
+  },
+  "Jaw": {
+   "volume_mm3": 2354.3,
+   "print_size": [
+    44.0,
+    18.0,
+    3.0
+   ],
+   "valid": true
+  },
+  "Knob": {
+   "volume_mm3": 1824.5,
+   "print_size": [
+    17.8,
+    17.8,
+    9.0
+   ],
+   "valid": true
+  },
+  "Bezel": {
+   "volume_mm3": 2387.9,
+   "print_size": [
+    48.0,
+    48.0,
+    4.4
+   ],
+   "valid": true
+  },
+  "Board_Cap": {
+   "volume_mm3": 2529.6,
+   "print_size": [
+    32.6,
+    25.9,
+    14.0
+   ],
+   "valid": true
+  }
+ },
+ "problems": [],
+ "notes": [
+  "room behind the display's rear components for solder joints and wires: 2.4 mm",
+  "front lip is 12 mm tall (chin 24 mm)",
+  "pod + cover are 10 mm thick; the unit hangs 60 mm below the monitor, 7 mm in front of the bezel, 48 mm wide",
+  "behind the monitor: back wall + board + cap reach 17 mm past its back face (the plug and cable go up from there)",
+  "clamp fits monitor thickness 0.2 to 24.2 mm bare, 0.0 to 22.2 mm with 1.0 mm padding on both the lip and the jaw (screw travel 24 mm)",
+  "clamped on a 21.5 mm monitor the screw head ends 25 mm behind the back wall (knob 18 mm dia)",
+  "pod bolts reach 4.0 mm into the 5.1 mm inserts; 2.4 mm of plastic is left in front of each insert",
+  "board is held by: ledge lip over 0.8 mm of its lower edge; cap wall 0.2 mm above its upper edge, covering 4.1 mm each side of the USB socket; 0.3 mm side play in the cap",
+  "USB socket face is 0.2 mm below the cap's top face (a plug loses that much insertion)",
+  "cap bolt: 3.0 mm under its head, 6.0 mm into the back wall (insert 5.1; tip ends 1.0 mm into the 4.5 mm gap behind the monitor)"
+ ]
+}

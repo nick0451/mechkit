@@ -1,0 +1,19 @@
+{
+ "name": "Monitor weather display",
+ "created": "2026-11-23",
+ "kit": "../..",
+ "cloud_folder": "(not created yet)",
+ "assembly": null,
+ "custom_parts": [],
+ "views": {},
+ "print": {
+  "machine": "Bambu Lab A1 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1",
+  "filament": "Generic PETG @BBL A1",
+  "bed_type": "Textured PEI Plate"
+ },
+ "export": {
+  "folder": "exports/monitor_weather_display_v{version}",
+  "bed_mm": 256
+ }
+}
